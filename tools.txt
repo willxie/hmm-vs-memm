@@ -1,0 +1,6 @@
+eclipse / pydev
+sklearn -> ML toolkit for python
+numpy
+
+Data on cs machines:
+/projects/nlp/penn-treebank3/tagged/pos

@@ -100,14 +100,14 @@ def dirTraverse(path, numberOfSentencesToTrain, currentCount, sentences):
             currentCount, sentences = dirTraverse(fileName, numberOfSentencesToTrain, currentCount, sentences)
     return (currentCount, sentences)
 
-def createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_word_count):
-    emissionProbs = np.zeros((len(symbolsSeen), len(POS_tagsSeen)))
+def createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count):
+    emissionProbs = np.zeros((len(POS_tagsSeen), len(symbolsSeen)))
     for POS in POS_tagsSeen:
         for word in symbolsSeen:
             key = tuple([word, POS])
             numerator = float(map_wordPOS_count.get(key,0))
-            denominator = float(map_word_count[word])
-            emissionProbs[map_symbol_index[word]][map_POS_index[POS]] = numerator/denominator
+            denominator = float(map_POS_count[POS])
+            emissionProbs[map_POS_index[POS]][map_symbol_index[word]] = numerator/denominator
     return emissionProbs
 
 def createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count, map_POS_count):
@@ -119,21 +119,22 @@ def createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count,
             denominator = float(map_POS_count[pPOS])
             transitionProb[map_POS_index[pPOS]][map_POS_index[cPOS]] = numerator/denominator
     return transitionProb            
-                     
-def createConditionalProbabilitiesTables(rootPath, numberOfSentencesToTrain):
+def readSentences(rootPath, numberOfSentencesToTrain):
     sentenceCount, sentences = dirTraverse(rootPath, numberOfSentencesToTrain, 0, [])
+    return sentences
+def createConditionalProbabilitiesTables(sentences):
     symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
     map_symbol_index = {v: k for k, v in dict(enumerate(symbolsSeen)).items()}
     map_POS_index = {v: k for k, v in dict(enumerate(POS_tagsSeen)).items()}
     
-    emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_word_count)
+    emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count)
     transition_probabilities = createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count, map_POS_count)
-    print map_POS_index
-    print transition_probabilities
-    print [sum(transition_probabilities[i]) for i in range(transition_probabilities.shape[0])]
-     
-    print map_symbol_index
-    print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
+#     print map_POS_index
+#     print transition_probabilities
+#     print [sum(transition_probabilities[i]) for i in range(transition_probabilities.shape[0])]
+#      
+#     print map_symbol_index
+#     print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
     return (map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities)
 
 def main():

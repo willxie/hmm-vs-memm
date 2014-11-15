@@ -8,6 +8,7 @@ from os import listdir
 from os.path import isfile, join
 import sys
 import numpy as np
+from hmmUsage import transition_probabilities
 
 # POS_TAGS = ["CC", "CD", "DT", "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNS", "NNP", "NNPS", "PDT", "POS", "PRP", "PRP$", "RB", "RBR", "RBS", "RP", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "WDT", "WP", "WP$", "WRB"]
 SYMBOLS_SEEN = set()
@@ -24,8 +25,10 @@ map_word_count = {}
 map_symbol_index = {}
 map_POS_index = {}
 
+sentences = []
 def readFile(systemRun, numberOfSentencesToTrain, currentCount):
     previousTag = None
+    sentence = []
     with open(systemRun, 'rb') as file:
         for line in file:
             if not line.strip(): 
@@ -34,6 +37,7 @@ def readFile(systemRun, numberOfSentencesToTrain, currentCount):
                 if previousTag is None:
                     previousTag = "<S>"
                     map_POS_count[previousTag] = map_POS_count.get(previousTag, 0) + 1
+                    sentence = []
                     continue
                 tag = "<\S>"
                 map_POS_count[tag] = map_POS_count.get(tag, 0) + 1
@@ -42,6 +46,8 @@ def readFile(systemRun, numberOfSentencesToTrain, currentCount):
                 if currentCount == numberOfSentencesToTrain:
                     return numberOfSentencesToTrain
                 else: 
+                    sentences.append(sentence)
+                    sentence = []
                     previousTag = "<S>"
                     map_POS_count[previousTag] = map_POS_count.get(previousTag, 0) + 1
                     currentCount += 1
@@ -52,6 +58,9 @@ def readFile(systemRun, numberOfSentencesToTrain, currentCount):
             for observation in line:
                 word, tag = observation.split('/')
                 word = word.upper()
+                sentence.append((word, tag))
+                
+                # add to vocabulary
                 POS_TAGS_SEEN.add(tag)
                 SYMBOLS_SEEN.add(word)
                 
@@ -72,7 +81,8 @@ def readFile(systemRun, numberOfSentencesToTrain, currentCount):
     map_POS_count[tag] = map_POS_count.get(tag, 0) + 1
     key = tuple([previousTag,tag])
     map_POSPOS_count[key] = map_POSPOS_count.get(key, 0) + 1
-    return currentCount
+    sentences.append(sentence)
+    return (currentCount, sentences)
 
 def dirTraverse(path, numberOfSentencesToTrain, currentCount):
     files = [ f for f in listdir(path)]
@@ -105,19 +115,18 @@ def createTransitionProbabilities(map_POS_index):
             transitionProb[map_POS_index[pPOS]][map_POS_index[cPOS]] = numerator/denominator
     return transitionProb            
                      
-def main():
-    numberOfSentencesToTrain = int(sys.argv[2])
-    rootPath = sys.argv[1]
+def createConditionalProbabilitiesTables(rootPath, numberOfSentencesToTrain):
     dirTraverse(rootPath, numberOfSentencesToTrain, 0)
     map_symbol_index = {v: k for k, v in dict(enumerate(SYMBOLS_SEEN)).items()}
     map_POS_index = {v: k for k, v in dict(enumerate(POS_TAGS_SEEN)).items()}
     
     emission_probabilities = createEmissionProbabilities(map_symbol_index, map_POS_index)
     transition_probabilities = createTransitionProbabilities(map_POS_index)
-    print map_POS_index
-    print [sum(transition_probabilities[i]) for i in range(transition_probabilities.shape[0])]
-    
-    print map_symbol_index
-    print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
+#     print map_POS_index
+#     print [sum(transition_probabilities[i]) for i in range(transition_probabilities.shape[0])]
+#     
+#     print map_symbol_index
+#     print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
+    return (transition_probabilities, emission_probabilities)
 if __name__ == "__main__":
     main()

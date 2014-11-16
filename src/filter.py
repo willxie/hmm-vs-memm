@@ -13,18 +13,18 @@ import numpy as np
 
 def readFile(systemRun, numberOfSentencesToTrain, currentCount):
     sentences = []
-    previousTag = None
     sentence = []
     with open(systemRun, 'rb') as datafile:
         for line in datafile:
             if not line.strip(): 
                 continue
+            if line.startswith("*x*"): # copy right notice
+                continue
             if line.startswith("==="):
-                if previousTag is None:
-                    sentence = []
+                if sentence == []:
                     continue
                 if currentCount == numberOfSentencesToTrain:
-                    return numberOfSentencesToTrain
+                    return sentences
                 else: 
                     sentences.append(sentence)
                     currentCount += 1
@@ -158,9 +158,3 @@ def createConditionalProbabilitiesTables(sentences, laplaceSmoothing = None):
     emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count)
     
     return (map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities)
-def main():
-    path = "/home/czar/dev/GraphModels/finalProject/data/pos/wsj"
-    number = 1
-    createConditionalProbabilitiesTables(path, number)
-if __name__ == "__main__":
-    main()

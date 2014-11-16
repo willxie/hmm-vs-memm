@@ -58,7 +58,15 @@ def getCountsFromSentences(sentences):
     for sentence in sentences:
         previousTag = '<S>'
         POS_TAGS_SEEN.add(previousTag)
+        
+        word = '<S>'
+        SYMBOLS_SEEN.add(word)
+        
+        map_word_count[word] = map_word_count.get(word, 0) + 1
         map_POS_count[previousTag] = map_POS_count.get(previousTag, 0) + 1
+        
+        key = tuple([word,previousTag])
+        map_wordPOS_count[key] = map_wordPOS_count.get(key, 0) + 1
         for word, tag in sentence:
             # add to vocabulary
             POS_TAGS_SEEN.add(tag)
@@ -79,10 +87,16 @@ def getCountsFromSentences(sentences):
             previousTag = tag
         tag = "<\S>"
         POS_TAGS_SEEN.add(tag)
+        word = '<\S>'
+        SYMBOLS_SEEN.add(word)
+        
         map_POS_count[tag] = map_POS_count.get(tag, 0) + 1
+        map_word_count[word] = map_word_count.get(word, 0) + 1
         
         key = tuple([tag,previousTag])
         map_POSPOS_count[key] = map_POSPOS_count.get(key, 0) + 1
+        key = tuple([word,tag])
+        map_wordPOS_count[key] = map_wordPOS_count.get(key, 0) + 1
         
     return (SYMBOLS_SEEN, POS_TAGS_SEEN, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count)
         
@@ -117,7 +131,7 @@ def createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count,
             key = tuple([cPOS,pPOS])
             numerator = float(map_POSPOS_count.get(key,0))
             denominator = float(map_POS_count[pPOS])
-            transitionProb[map_POS_index[pPOS]][map_POS_index[cPOS]] = numerator/denominator
+            transitionProb[map_POS_index[cPOS]][map_POS_index[pPOS]] = numerator/denominator
     return transitionProb            
 def readSentences(rootPath, numberOfSentencesToTrain):
     sentenceCount, sentences = dirTraverse(rootPath, numberOfSentencesToTrain, 0, [])
@@ -136,7 +150,6 @@ def createConditionalProbabilitiesTables(sentences):
 #     print map_symbol_index
 #     print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
     return (map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities)
-
 def main():
     path = "/home/czar/dev/GraphModels/finalProject/data/pos/wsj"
     number = 1

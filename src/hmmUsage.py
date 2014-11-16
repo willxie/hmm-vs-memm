@@ -11,7 +11,7 @@ stateNum = 2
 transition_probabilities = numpy.array( [   [.5,.5],
                                             [.4,.6]  ] )
 emission_probabilities = numpy.array(   [   [0.2, 0.3, 0.3, 0.2], \
-                                            [0.3, 0.2, 0.2, 0.3] ] )
+                                            [0, 0.5, 0.2, 0.3] ] )
 #symbols
 symbolList = ["A","C", "G", "T"]
 Pi = [0.5,0.5]

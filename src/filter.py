@@ -133,22 +133,29 @@ def createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count,
             denominator = float(map_POS_count[pPOS])
             transitionProb[map_POS_index[cPOS]][map_POS_index[pPOS]] = numerator/denominator
     return transitionProb            
+
 def readSentences(rootPath, numberOfSentencesToTrain):
     sentenceCount, sentences = dirTraverse(rootPath, numberOfSentencesToTrain, 0, [])
     return sentences
-def createConditionalProbabilitiesTables(sentences):
+
+def createConditionalProbabilitiesTables(sentences, laplaceSmoothing = None):
     symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
+    
     map_symbol_index = {v: k for k, v in dict(enumerate(symbolsSeen)).items()}
     map_POS_index = {v: k for k, v in dict(enumerate(POS_tagsSeen)).items()}
     
-    emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count)
     transition_probabilities = createTransitionProbabilities(POS_tagsSeen, map_POS_index, map_POSPOS_count, map_POS_count)
-#     print map_POS_index
-#     print transition_probabilities
-#     print [sum(transition_probabilities[i]) for i in range(transition_probabilities.shape[0])]
-#      
-#     print map_symbol_index
-#     print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
+    
+    if laplaceSmoothing:
+        word = '<U>'
+        symbolsSeen.add(word)
+        map_symbol_index[word] = len(map_symbol_index.keys())
+        for POS in POS_tagsSeen:
+            key = tuple([word, POS])
+            map_wordPOS_count[key] = 1
+            map_POS_count[POS] = map_POS_count[POS]+1
+    # IMPORTANT: laplace smoothing will change the POS counts so transitions must be computed first
+    emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count)
     return (map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities)
 def main():
     path = "/home/czar/dev/GraphModels/finalProject/data/pos/wsj"

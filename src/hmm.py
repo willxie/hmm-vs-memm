@@ -182,7 +182,7 @@ def symbol_index( hmm, Obs ):
     of indices for accessing distribution matrices.
     """
     Obs_ind = []
-    for o in Obs: Obs_ind.append( hmm.symbol_map[ o ] )
+    for o in Obs: Obs_ind.append( hmm.symbol_map.get( o, hmm.symbol_map.get('<U>', -1 )))
     
     return Obs_ind
 

@@ -9,39 +9,61 @@ import numpy as np
 
 
 numberOfSamples = 10000
-numberOfTestingSamples = 10
-rootExp =  '/home/czar/TO_DELETE'#'/home/czar/dev/GraphModels/finalProject/data/pos/wsj' # PATH TO DATA #'/home/czar/TO_DELETE'#
+numberCrosses = 20
+
+numberSentences = 0
+numberTags = 0
+numberSentencesCorrect = 0
+numberTagsCorrect = 0
+
+rootExp =  '/home/czar/dev/GraphModels/finalProject/data/pos/wsj' # PATH TO DATA #'/home/czar/TO_DELETE'#
 
 sentences = readSentences(rootExp, numberOfSamples)
-trainSet = sentences[:-numberOfTestingSamples]
-testSet = sentences[-numberOfTestingSamples:]
-trainSet = sentences
-map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, True)
-map_index_symbol =  {v: k for k, v in map_symbol_index.items()}
-map_index_POS =  {v: k for k, v in map_POS_index.items()}
-symbolList = []
-for key in sorted(map_index_symbol.keys()):
-    symbolList.append(map_index_symbol[key])
-initialProbabilities = [0 for i in range(len(map_POS_index.keys()))]
-initialProbabilities[map_POS_index["<S>"]] = 1
-initialProbabilities = np.asarray(initialProbabilities)
+crossSize = len(sentences)/ numberCrosses
+for i in range(numberCrosses):
+    if i != 0:
+        train1 = sentences[:i*crossSize: (i)*crossSize]
+    else:
+        train1 = []
+    train2 = sentences[(i+1)*crossSize:]
+    trainSet = train1 + train2
+    
+    testSet = sentences[i*crossSize: (i+1)*crossSize]
+    
+    # trainSet = sentences
+    map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(trainSet, True)
+    map_index_symbol =  {v: k for k, v in map_symbol_index.items()}
+    map_index_POS =  {v: k for k, v in map_POS_index.items()}
+    symbolList = []
+    for key in sorted(map_index_symbol.keys()):
+        symbolList.append(map_index_symbol[key])
+    initialProbabilities = [0 for i in range(len(map_POS_index.keys()))]
+    initialProbabilities[map_POS_index["<S>"]] = 1
+    initialProbabilities = np.asarray(initialProbabilities)
+    
+    # print [sum(transition_probabilities[:,i]) for i in range(transition_probabilities.shape[1])]
+    # print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
+    model = HMM(len(map_POS_index.keys()), A=transition_probabilities, B=emission_probabilities, V=symbolList, Pi=initialProbabilities)
+    
+    for sentence in testSet:
+        wordSeq = ['<S>']
+        POSSeq = ['<S>']
+        for word, POS in sentence:
+            wordSeq.append(word)
+            POSSeq.append(POS)
+        wordSeq.append('<\S>')
+        POSSeq.append('<\S>')
+        resultPOS = viterbi(model, wordSeq, scaling=False)
+        returnedSeq = [map_index_POS[x] for x in resultPOS[0]]
+        
+        if returnedSeq == POSSeq:
+            numberSentencesCorrect += 1
+        numberSentences +=1
+        
+        for x, y in zip(POSSeq, returnedSeq):
+            if x==y:
+                numberTagsCorrect +=1
+            numberTags += 1
 
-print [sum(transition_probabilities[:,i]) for i in range(transition_probabilities.shape[1])]
-print [sum(emission_probabilities[i]) for i in range(emission_probabilities.shape[0])]
-model = HMM(len(map_POS_index.keys()), A=transition_probabilities, B=emission_probabilities, V=symbolList, Pi=initialProbabilities)
-
-numberCorrect = 0
-for sentence in trainSet:
-    wordSeq = ['<S>']
-    POSSeq = ['<S>']
-    for word, POS in sentence:
-        wordSeq.append(word)
-        POSSeq.append(POS)
-    wordSeq.append('<\S>')
-    POSSeq.append('<\S>')
-    wordSeq[2] = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-    resultPOS = viterbi(model, wordSeq, scaling=False)
-    returnedSeq = [map_index_POS[x] for x in resultPOS[0]]
-    if returnedSeq == POSSeq:
-        numberCorrect += 1
-print numberCorrect/float(len(trainSet))
+print numberSentencesCorrect/float(numberSentences)
+print numberTagsCorrect/float(numberTags)

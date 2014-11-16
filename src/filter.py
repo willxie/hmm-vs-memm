@@ -156,6 +156,7 @@ def createConditionalProbabilitiesTables(sentences, laplaceSmoothing = None):
             map_POS_count[POS] = map_POS_count[POS]+1
     # IMPORTANT: laplace smoothing will change the POS counts so transitions must be computed first
     emission_probabilities = createEmissionProbabilities(symbolsSeen, POS_tagsSeen, map_symbol_index, map_POS_index, map_wordPOS_count, map_POS_count)
+    
     return (map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities)
 def main():
     path = "/home/czar/dev/GraphModels/finalProject/data/pos/wsj"

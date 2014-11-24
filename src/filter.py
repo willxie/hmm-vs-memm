@@ -1,9 +1,3 @@
-'''
-Created on Nov 11, 2014
-
-@author: czar
-'''
-
 from os import listdir
 from os.path import isfile, join
 import sys

@@ -1,9 +1,6 @@
-
 import sys
 import numpy
 from filter import readSentences, createConditionalProbabilitiesTables, getCountsFromSentences
-
-#TODO add C into functions
 
 # Count the number of words in total observed
 def countWords(sentences):
@@ -14,31 +11,38 @@ def countWords(sentences):
 	return count
 
 # Build the last, (o, s) specific feature
-def buildLastFeature(sentences, max_num_features, C):
+def buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS):
 	last_feature_list = {}
 
-	for sentence in sentences:
-		for word, tag in sentence:	# For each word tag pair
-			if last_feature_list.get((word, tag), True): # Calculate if doesn't exist already
-				total = 0
-				for i in range(max_num_features):
-					total += feature(i, word, tag)
-				last_feature_list[(word, tag)]	= C - total
+	for i in range(len(map_index_POS)):
+		for j in range(len(map_index_symbol)):
+			word = map_index_symbol[j]
+			tag = map_index_POS[i]
+			total = 0
+			for l in range(max_num_features):
+				total += feature(l, word, tag)
+			last_feature_list[(word, tag)]	= C - total
 
 	return last_feature_list
 
 # Indicator feature function that reutrns 1 if feature is matched otherwise 0
+# This includes the n + 1 feature, which requires (word, tag) to access
+# Total number of unique features = max_num_features + N * M
 # f_<b, s>(O_t, S_t)
 def feature(num_features, word, state, last_feature_list = {}, word_tag_tuple = ()):
+	# TODO remove this once the tag bank is fixed
+#	word = word.lower()
+
 	# Done by inspection of the first file in Brown
 	if num_features == 0:
-		return 1 if state == "NNS" and word.endswith("s") else 0
+		return 1 if state == "NNS" and word.endswith("S") else 0
 	elif num_features == 1:
-		return 1 if state == "VBD" and word.endswith("ed") else 0
+		return 1 if state == "VBD" and word.endswith("ED") else 0
 	elif num_features == 2:
-		return 1 if state == "VBG" and word.endswith("ing") else 0
+		return 1 if state == "VBG" and word.endswith("ING") else 0
 	elif num_features == 3:
-		return 1 if state == "NNP" and word[0].isupper() else 0
+#		return 1 if state == "NNP" and word[0].isupper() else 0
+		return 0
 	elif num_features == 4:
 		return 1 if state == "DT" and word.lower() == "the" else 0
 	else:
@@ -68,23 +72,13 @@ def feature(num_features, word, state, last_feature_list = {}, word_tag_tuple = 
 		2: word == "JURY"
 	}
 	'''
-	'''
-	# Nouns
-	if state == "NNP":
-		print(word)
-		print(featureNum)
-		print(1 if featureIndicator.get(state, {}).get(featureNum, True) else 0)
-	'''
-#	if featureIndicator.get(state, {}).get(featureNum, False):
-#		print("Feature found!")
-    # Feature not found returns True and 1
-#	return 1 if featureIndicator.get(state, {}).get(featureNum, True) else 0
 
 # Calculate the training data average for each feature
-# There are (max_num_features + len(last_feature_list) features
+# Length = max_num_features + N * M
 def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 	F = {}
 
+	# Regular features
 	for i in range(max_num_features):
 		F[i] = 0.0
 		for sentence in sentences:
@@ -92,6 +86,7 @@ def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 				F[i] += feature(i, word, tag)
 		F[i] = F[i] / m
 
+	# (o, s) dependent features
 	for word_tag_tuple in last_feature_list:
 		F[word_tag_tuple] = 0.0
 		for sentence in sentences:
@@ -101,35 +96,37 @@ def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 
 	return F
 
-
 # Calculate the expectation for each feature
+# param m number of observations
 def buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS):
 	E = {}
-	
+	N = len(map_index_POS)
+
 	for i in range(max_num_features):
 		E[i] = 0.0
-        previous_tag = ""
-	for sentence in sentences:
-		for word, tag in sentence:
-			if previous_tag == "":
-                		# TODO initial condition?
-				E[i] += feature(i, word, tag)
-			else:
-				l = map_POS_index[previous_tag]
-				k = map_symbol_index[word]
-				for j in range(N):
-					E[i] += TPM[l*M+k][j] * feature(i, word, map_index_POS[j])
-				previous_tag = tag
-		E[i] = E[i] / m
-		
-	for word_tag_tuple in last_feature_list:
-		E[word_tag_tuple] = 0.0
-        	previous_tag = ""
+		previous_tag = ""
 		for sentence in sentences:
 			for word, tag in sentence:
-				# TODO initial condition?
 				if previous_tag == "":
-					E[word_tag_tuple] += feature(max_num_features, word, tag, last_feature_list, word_tag_tuple)
+					# Uniform distribution for first state
+					for j in range(N):
+						E[i] += 1 / N * feature(i, word, map_index_POS[j])
+				else:
+					l = map_POS_index[previous_tag]
+					k = map_symbol_index[word]
+					for j in range(N):
+						E[i] += TPM[l*M+k][j] * feature(i, word, map_index_POS[j])
+				previous_tag = tag
+		E[i] = E[i] / m
+
+	for word_tag_tuple in last_feature_list:
+		E[word_tag_tuple] = 0.0
+		previous_tag = ""
+		for sentence in sentences:
+			for word, tag in sentence:
+				if previous_tag == "":
+					for j in range(N):
+						E[word_tag_tuple] += 1 / N * feature(max_num_features, word, map_index_POS[j], last_feature_list, word_tag_tuple)
 				else:
 					l = map_POS_index[previous_tag]
 					k = map_symbol_index[word]
@@ -141,61 +138,12 @@ def buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map
 
 	return E
 
-# Use Generalized iterative scaling to learn Lambda
-# param TPM (N * M) x N transitional probability matrix, normalized
-# param Lambda N x C paramter matrix for the transitional probability matrix to be learned
-# param F (N * M) x C feature average matrix. One value per feature pair (s, o)
-# param sentences List of sentences from filter. Starts from sentences[1], each sentence contain ('word', 'tag') pair
+# Use Generalized iterative scaling to learn Lambda parameter
 def GIS(Lambda, C, F, E):
 	for key in Lambda:
+		if F[key] == 0 or E[key] == 0:
+			print("Warning, F or E = 0")
 		Lambda[key] = Lambda[key] + 1 / C * numpy.log(F[key]/E[key])
-
-		
-		
-# Calculate F N x C feature average matrix.
-# param sentences List of sentences from filter.py
-'''
-def buildAverageFeatureMatrix(N, m, C, sentences):
-	F = numpy.zeros(shape = (N, C))
-
-	# Foreach feature
-	for i in range(0, N):					# State
-		for j in range(0, C):				# Feature number
-			for sentence in sentences:		# Sum all feature values
-				for word, tag in sentence:
-					print(word),
-					print(tag)
-					F[i][j] += feature(word, tag, j)
-	# Normalize
-	F = F / m
-	return F
-'''
-# Create un-normalized transition probability matrix (TPM) given previous state and current observation
-# param Lambda N x C paramter matrix for the transitional probability matrix to be learned
-# param V 1 x M vector of observations (words)
-# param M length of V
-# param C length
-# param state_symbol_map 1 x N vector that stores all states
-def buildTPM(N, M, Lambda, max_num_features, map_index_symbol, map_index_POS, last_feature_list):
-	# TPM (N * M) x N transitional probability matrix
-	TPM = numpy.zeros(shape = (N * M, N), dtype = float)
-
-	# Calculate states
-	for i in range(0, N):					# Previous state
-		for k in range(0, M):				# Current observation
-			for j in range(0, N):			# Current/target state
-				# Sum(Lambda_a * feature_a)
-				for l in range(0, max_num_features): # Normal features
-#					print(i, j, k, l)
-					TPM[i*M+k][j] += Lambda[l] * feature(l, map_index_symbol[k], map_index_POS[j])
-				# Special feature
-				word_tag_tuple = (map_index_symbol[k], map_index_POS[j])
-				# TODO Could be wrong, maybe special feature should be computed through the matrix instead of observation
-				if word_tag_tuple in Lambda:
-					TPM[i*M+k][j] += Lambda[word_tag_tuple] * feature(max_num_features, map_index_symbol[k], map_index_POS[j], last_feature_list, word_tag_tuple)
-	print(TPM)
-	# Raise to exponential
-	return numpy.exp(TPM)
 
 # Make each row of TPM add up to 1
 def normalizeTPM(TPM):
@@ -206,10 +154,67 @@ def normalizeTPM(TPM):
 			TPM[i][j] = TPM[i][j] / TPM_row_sum[i]
 	return TPM
 
+# Create un-normalized transition probability matrix (TPM) given previous state and current observation
+def buildTPM(Lambda, max_num_features, map_index_symbol, map_index_POS, last_feature_list):
+	N = len(map_index_POS)
+	M = len(map_index_symbol)
+	TPM = numpy.zeros(shape = (N * M, N), dtype = float)	# TPM (N * M) x N transitional probability matrix
+
+	# Calculate states
+	for i in range(0, N):					# Previous state
+		for k in range(0, M):				# Current observation
+			for j in range(0, N):			# Current/target state
+				word = map_index_symbol[k]
+				tag = map_index_POS[j]
+				# Sum(Lambda_a * feature_a)
+				for l in range(0, max_num_features): # Normal features
+					TPM[i*M+k][j] += Lambda[l] * feature(l, word, tag)
+				# Special feature
+				word_tag_tuple = (word, tag)
+				TPM[i*M+k][j] += Lambda[word_tag_tuple] * feature(max_num_features, word, tag, last_feature_list, word_tag_tuple)
+	# Raise to exponential
+	return numpy.exp(TPM)
+
+# Use viterbi algorithm to find the most probable sequence of tags
+# Based on the hmm.py implementation
+# param Pi_state_index index for tag "<S>"
+# param word_sequence make sentences into single list with appended <S> and <\S>
+def MEMMViterbi(TPM, Pi_state_index, word_sequence, m, map_symbol_index, map_POS_index):
+	N = len(map_POS_index)      
+	M = len(map_symbol_index)
+
+	# Delta[s, t], Psi[s, t]
+	Delta = numpy.zeros([N, m], float)		# Track Max probabilities for each t
+	Psi =  numpy.zeros([N, m], int) 		# Track Maximal States for each t
+
+	# Given the starting state (t = -1), calculate max prob. each state to current observation
+	# Note that because MEMM takes both state and obs as given, only consider for each state with fix obs
+	for j in range(N):
+		# Initial last tag is assumed to be Pi_state_index
+		word_index = map_symbol_index[word_sequence[0]]
+		Delta[j, 0] = TPM[Pi_state_index*M+word_index][j]
+        
+	# Inductive Step:
+	for t in range(1, m):			
+		word_index = map_symbol_index[word_sequence[t]]
+		for j in range(N):			# For each destination state at t
+			temp = numpy.zeros(N, float)
+			for i in range(N):		# For each source state at t - 1
+				temp[i] = Delta[i, t-1] * TPM[i*M+word_index][j] # 1 x N vector that stores 
+			Delta[j, t] = temp.max()
+			Psi[j, t] = temp.argmax()
+
+	# Calculate State Sequence, Q*:
+	Q_star = [numpy.argmax(Delta[ :,M-1])] 
+	for t in reversed(range(M-1)) :
+		Q_star.insert(0, Psi[Q_star[0],t+1])
+
+	return (Q_star, Delta, Psi)
+
 # test section
 numpy.set_printoptions(threshold=sys.maxint)
 
-sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 3)
+sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 1)
 #sentences2 = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_bak/pos/brown/ca/", 10)
 
 symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
@@ -226,14 +231,15 @@ C = 6 # This should be number of features + 1
 max_num_features = C - 1
 Lambda = {}
 
-last_feature_list = buildLastFeature(sentences, max_num_features, C)
+
+last_feature_list =  buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS)
 F = buildAverageFeature(sentences, m, max_num_features, last_feature_list) # Consider coverting to numpy representation
 
 Lambda = F.copy()
-for key in F:
+for key in Lambda:
 	Lambda[key] = 1
 
-TPM = buildTPM(N, M, Lambda, max_num_features, map_index_symbol, map_index_POS, last_feature_list)
+TPM = buildTPM(Lambda, max_num_features, map_index_symbol, map_index_POS, last_feature_list)
 TPM = normalizeTPM(TPM)
 print(TPM)
 print("="*80)
@@ -241,43 +247,10 @@ E = buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map
 print(E)
 print("="*80)
 print(Lambda)
-
+'''
 GIS(Lambda, C, F, E)
 print("="*80)
 print(Lambda)
 
-'''
-print("="*80)
-print(F)
-'''
-
 
 '''
-F = buildAverageFeatureMatrix(N, m, C, sentences)
-
-print(sentences[0])
-print(F)
-print(numpy.shape(F))'''
-#F = buildAverageFeatureMatrix(N, M, C, sentences)
-
-
-
-
-
-"""
-C = 3
-state_symbol_map = ["NNS", "VB"]
-N = len(state_symbol_map)
-Lambda = numpy.ones(N * C).reshape((N, C))
-
-V = ["dogs", "cats", "jumps", "flying", "eaten", "eaving", "shape", "shapes"]
-"""
-"""
-print(state_symbol_map)
-print(Lambda)
-print(B)
-"""
-"""
-TPM = buildTPM(Lambda, V, len(V), state_symbol_map)
-TPM = normalizeTPM(TPM)
-"""

@@ -1,4 +1,6 @@
-
+VG verb:
+-ing
+-ed
 
 ing
 ed

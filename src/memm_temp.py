@@ -111,7 +111,7 @@ def buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map
 				if previous_tag == "":
 					# TODO Uniform distribution for first state
 					for j in range(N):
-						E[i] += 1 * feature(i, word, map_index_POS[j])
+						E[i] += feature(i, word, map_index_POS[j]) 
 				else:
 					l = map_POS_index[previous_tag]
 					k = map_symbol_index[word.upper()]

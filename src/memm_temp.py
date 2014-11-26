@@ -11,6 +11,7 @@ def countWords(sentences):
 	return count
 
 # Build the last, (o, s) specific feature
+# Note tags and words are stored in all uppercase
 def buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS):
 	last_feature_list = {}
 
@@ -28,10 +29,10 @@ def buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS):
 # Indicator feature function that reutrns 1 if feature is matched otherwise 0
 # This includes the n + 1 feature, which requires (word, tag) to access
 # Total number of unique features = max_num_features + N * M
+# WORDS ARE CASE INSENSITIVE
 # f_<b, s>(O_t, S_t)
 def feature(num_features, word, state, last_feature_list = {}, word_tag_tuple = ()):
-	# TODO remove this once the tag bank is fixed
-#	word = word.lower()
+	word = word.upper()
 
 	# Done by inspection of the first file in Brown
 	if num_features == 0:
@@ -41,10 +42,9 @@ def feature(num_features, word, state, last_feature_list = {}, word_tag_tuple = 
 	elif num_features == 2:
 		return 1 if state == "VBG" and word.endswith("ING") else 0
 	elif num_features == 3:
-#		return 1 if state == "NNP" and word[0].isupper() else 0
-		return 0
+		return 1 if state == "TO" and word == "TO" else 0
 	elif num_features == 4:
-		return 1 if state == "DT" and word.lower() == "the" else 0
+		return 1 if state == "DT" and word == "THE" else 0
 	else:
 		temp_tuple = (word, state)
 		if temp_tuple == word_tag_tuple:
@@ -80,7 +80,7 @@ def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 
 	# Regular features
 	for i in range(max_num_features):
-		F[i] = 0.0
+		F[i] = float(0)
 		for sentence in sentences:
 			for word, tag in sentence:
 				F[i] += feature(i, word, tag)
@@ -88,7 +88,7 @@ def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 
 	# (o, s) dependent features
 	for word_tag_tuple in last_feature_list:
-		F[word_tag_tuple] = 0.0
+		F[word_tag_tuple] = float(0)
 		for sentence in sentences:
 			for word, tag in sentence:
 				F[word_tag_tuple] += feature(max_num_features, word, tag, last_feature_list, word_tag_tuple)
@@ -100,36 +100,38 @@ def buildAverageFeature(sentences, m, max_num_features, last_feature_list):
 # param m number of observations
 def buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS):
 	E = {}
-	N = len(map_index_POS)
+	N = len(map_POS_index)
+	M = len(map_symbol_index)
 
 	for i in range(max_num_features):
-		E[i] = 0.0
+		E[i] = float(0)
 		previous_tag = ""
 		for sentence in sentences:
 			for word, tag in sentence:
 				if previous_tag == "":
-					# Uniform distribution for first state
+					# TODO Uniform distribution for first state
 					for j in range(N):
-						E[i] += 1 / N * feature(i, word, map_index_POS[j])
+						E[i] += 1 * feature(i, word, map_index_POS[j])
 				else:
 					l = map_POS_index[previous_tag]
-					k = map_symbol_index[word]
+					k = map_symbol_index[word.upper()]
 					for j in range(N):
 						E[i] += TPM[l*M+k][j] * feature(i, word, map_index_POS[j])
 				previous_tag = tag
 		E[i] = E[i] / m
 
 	for word_tag_tuple in last_feature_list:
-		E[word_tag_tuple] = 0.0
+		E[word_tag_tuple] = float(0)
 		previous_tag = ""
 		for sentence in sentences:
 			for word, tag in sentence:
 				if previous_tag == "":
 					for j in range(N):
-						E[word_tag_tuple] += 1 / N * feature(max_num_features, word, map_index_POS[j], last_feature_list, word_tag_tuple)
+						# TODO Uniform distribution for first state
+						E[word_tag_tuple] +=  feature(max_num_features, word, map_index_POS[j], last_feature_list, word_tag_tuple)
 				else:
 					l = map_POS_index[previous_tag]
-					k = map_symbol_index[word]
+					k = map_symbol_index[word.upper()]
 					for j in range(N):
 						E[word_tag_tuple] += TPM[l*M+k][j] * feature(max_num_features, word, map_index_POS[j], last_feature_list, word_tag_tuple)
 				previous_tag = tag
@@ -141,9 +143,15 @@ def buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map
 # Use Generalized iterative scaling to learn Lambda parameter
 def GIS(Lambda, C, F, E):
 	for key in Lambda:
-		if F[key] == 0 or E[key] == 0:
-			print("Warning, F or E = 0")
-		Lambda[key] = Lambda[key] + 1 / C * numpy.log(F[key]/E[key])
+#		assert F[key] != 0, "F[%s] == 0" % key
+#		assert E[key] != 0, "E[%s] == 0" % key
+		assert not(F[key] == 0 and E[key] != F[key]), "F[{0}] == 0 but not E".format(key)
+		assert not(E[key] == 0 and E[key] != F[key]), "E[{0}] == 0 but not F".format(key)
+		if F[key] == 0 and E[key] == 0:
+			# Speical feature-not-found-in-observation case but still F[key] = E[key] satisfying the requirement
+			Lambda[key] = Lambda[key]
+		else:
+			Lambda[key] = Lambda[key] + 1 / C * numpy.log(F[key]/E[key])
 
 # Make each row of TPM add up to 1
 def normalizeTPM(TPM):
@@ -170,7 +178,7 @@ def buildTPM(Lambda, max_num_features, map_index_symbol, map_index_POS, last_fea
 				for l in range(0, max_num_features): # Normal features
 					TPM[i*M+k][j] += Lambda[l] * feature(l, word, tag)
 				# Special feature
-				word_tag_tuple = (word, tag)
+				word_tag_tuple = (word.upper(), tag)
 				TPM[i*M+k][j] += Lambda[word_tag_tuple] * feature(max_num_features, word, tag, last_feature_list, word_tag_tuple)
 	# Raise to exponential
 	return numpy.exp(TPM)
@@ -191,12 +199,12 @@ def MEMMViterbi(TPM, Pi_state_index, word_sequence, m, map_symbol_index, map_POS
 	# Note that because MEMM takes both state and obs as given, only consider for each state with fix obs
 	for j in range(N):
 		# Initial last tag is assumed to be Pi_state_index
-		word_index = map_symbol_index[word_sequence[0]]
+		word_index = map_symbol_index[word_sequence[0].upper()]
 		Delta[j, 0] = TPM[Pi_state_index*M+word_index][j]
         
 	# Inductive Step:
 	for t in range(1, m):			
-		word_index = map_symbol_index[word_sequence[t]]
+		word_index = map_symbol_index[word_sequence[t].upper()]
 		for j in range(N):			# For each destination state at t
 			temp = numpy.zeros(N, float)
 			for i in range(N):		# For each source state at t - 1
@@ -231,26 +239,17 @@ C = 6 # This should be number of features + 1
 max_num_features = C - 1
 Lambda = {}
 
-
 last_feature_list =  buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS)
 F = buildAverageFeature(sentences, m, max_num_features, last_feature_list) # Consider coverting to numpy representation
-
+print(F)
+# Initialize Lambda as 1 then learn from training data
 Lambda = F.copy()
 for key in Lambda:
 	Lambda[key] = 1
 
 TPM = buildTPM(Lambda, max_num_features, map_index_symbol, map_index_POS, last_feature_list)
 TPM = normalizeTPM(TPM)
-print(TPM)
-print("="*80)
+
 E = buildExpectation(sentences, m, max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS)
-print(E)
-print("="*80)
-print(Lambda)
-'''
+
 GIS(Lambda, C, F, E)
-print("="*80)
-print(Lambda)
-
-
-'''

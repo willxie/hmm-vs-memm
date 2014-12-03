@@ -38,6 +38,7 @@ for i in range(numberCrosses):
     symbolList = []
     for key in sorted(map_index_symbol.keys()):
         symbolList.append(map_index_symbol[key])
+    # Pi
     initialProbabilities = [0 for i in range(len(map_POS_index.keys()))]
     initialProbabilities[map_POS_index["<S>"]] = 1
     initialProbabilities = np.asarray(initialProbabilities)

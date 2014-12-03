@@ -132,16 +132,16 @@ def buildAverageFeature(buckets, map_POS_index, max_num_features, last_feature_l
 		print(from_tag)
 		print("*"*80)		
 		# Regular features + special, normalizing feature
-		for i in range(max_num_features + 1):
-			F[from_tag][i] = float(0)
+		for l in range(max_num_features + 1):
+			F[from_tag][l] = float(0)
 			if m_s == 0:
 				continue
 			for word, tag in bucket:
 				print(word), 
 				print(tag)
 				word_tag_tuple = (word, tag)
-				F[from_tag][i] += feature(i, word, tag, last_feature_list, word_tag_tuple)
-			F[from_tag][i] = F[from_tag][i] / m_s
+				F[from_tag][l] += feature(l, word, tag, last_feature_list, word_tag_tuple)
+			F[from_tag][l] = F[from_tag][l] / m_s
 
 		# (o, s) dependent features
 		# for word_tag_tuple in last_feature_list:
@@ -162,20 +162,18 @@ def buildExpectation(E, bucket, max_num_features, last_feature_list, TPM, map_PO
 	M = len(map_symbol_index)
 	m_s = len(bucket)
 
-	for i in range(max_num_features + 1):
-		E[from_tag][i] = float(0)
+	i = map_POS_index[from_tag]
+	for l in range(max_num_features + 1):
+		E[from_tag][l] = float(0)
 		if m_s == 0:
 			continue
-		previous_tag = "<S>"
 		for word, tag in bucket:
-			l = map_POS_index[previous_tag]
 			k = map_symbol_index[word.upper()]
 			for j in range(N):
 				word_tag_tuple = (word, map_index_POS[j])
 				# print(i, j, k, l)
-				E[from_tag][i] += TPM[l*M+k][j] * feature(i, word, map_index_POS[j], last_feature_list, word_tag_tuple)
-			previous_tag = tag
-		E[from_tag][i] = E[from_tag][i] / m_s
+				E[from_tag][l] += TPM[i*M+k][j] * feature(l, word, map_index_POS[j], last_feature_list, word_tag_tuple)
+		E[from_tag][l] = E[from_tag][l] / m_s
 
 	# for word_tag_tuple in last_feature_list:
 	# 	E[from_tag][word_tag_tuple] = float(0)
@@ -205,7 +203,10 @@ def buildNextLambda(Lambda, C, F, E, from_tag):
 		# 	# Speical feature-not-found-in-observation case but still F[key] = E[key] satisfying the requirement
 		# 	Lambda[from_tag][feature_index] = Lambda[from_tag][feature_index]
 		else:
-			Lambda[from_tag][feature_index] = Lambda[from_tag][feature_index] + 1.0 / C * numpy.log(F[from_tag][feature_index]/E[from_tag][feature_index])
+			log_F = numpy.log(F[from_tag][feature_index])
+			log_E = numpy.log(E[from_tag][feature_index])
+			# Lambda[from_tag][feature_index] = Lambda[from_tag][feature_index] + 1.0 / C * numpy.log(F[from_tag][feature_index]/E[from_tag][feature_index])
+			Lambda[from_tag][feature_index] = Lambda[from_tag][feature_index] + (log_F - log_E) / C
 			print("--"*50)
 			print(F[from_tag][feature_index]),
 			print("/"),
@@ -303,8 +304,8 @@ def MEMMViterbi(TPM, Pi_state_index, word_sequence, m, map_symbol_index, map_POS
 # test section
 numpy.set_printoptions(threshold=sys.maxint)
 
-# sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 1)
-sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp2", 10)
+sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 10)
+# sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp2", 10)
 # sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp/", 1)
 #sentences2 = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_bak/pos/brown/ca/", 10)
 
@@ -347,10 +348,10 @@ while True:
 	for tag in map_POS_index:
 		buildNextLambda(Lambda, C, F, E, tag)
 	iter_count += 1
-	print("*"*80)
-	print(Lambda["DT"][0])
-	print("*"*80)
+	# print("*"*80)
+	# print(Lambda["DT"][0])
+	# print("*"*80)
 
 	if checkLambdaConvergence(Lambda0, Lambda, epsilon):
-		print(iter_count)
+		print " ".join(["iter_count:", str(iter_count)])
 		break;

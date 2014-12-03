@@ -3,46 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: final_report.aux
 The style file: abbrv.bst
 Database file #1: references.bib
-Warning--I didn't find a database entry for "memmImage"
-You've used 4 entries,
+You've used 6 entries,
             2118 wiz_defined-function locations,
-            536 strings with 4675 characters,
-and the built_in function-call counts, 1753 in all, are:
-= -- 165
-> -- 87
+            546 strings with 4918 characters,
+and the built_in function-call counts, 2182 in all, are:
+= -- 206
+> -- 107
 < -- 3
-+ -- 33
-- -- 28
-* -- 129
-:= -- 283
-add.period$ -- 14
-call.type$ -- 4
-change.case$ -- 23
++ -- 41
+- -- 34
+* -- 146
+:= -- 361
+add.period$ -- 19
+call.type$ -- 6
+change.case$ -- 33
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 72
-empty$ -- 137
-format.name$ -- 28
-if$ -- 384
+cite$ -- 6
+duplicate$ -- 87
+empty$ -- 174
+format.name$ -- 34
+if$ -- 473
 int.to.chr$ -- 0
-int.to.str$ -- 4
+int.to.str$ -- 6
 missing$ -- 5
-newline$ -- 23
-num.names$ -- 12
-pop$ -- 30
+newline$ -- 32
+num.names$ -- 16
+pop$ -- 43
 preamble$ -- 1
-purify$ -- 20
+purify$ -- 27
 quote$ -- 0
-skip$ -- 50
+skip$ -- 64
 stack$ -- 0
-substring$ -- 104
-swap$ -- 24
+substring$ -- 114
+swap$ -- 25
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 14
+type$ -- 22
 warning$ -- 0
-while$ -- 15
-width$ -- 5
-write$ -- 49
-(There was 1 warning)
+while$ -- 19
+width$ -- 7
+write$ -- 68

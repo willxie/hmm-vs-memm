@@ -53,16 +53,20 @@ William Xie\\
 \section{Introduction}
 A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is a crucial tasks that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) tagging is an stepping stone into solving more complex problems such as syntactic parsing of sentences. The typical techniques used to solve this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the datasets used in this investigation. Then, we compare HMMs and MEMMs. Next, we discuss how the training process works for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar situations.
 \section{Datasets}
+In this investigation we use the Wall Street Journal (WSJ), a 3-year collection of 2,499 articles from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods~\cite{wsjCorpus}. 
 
-\section{HMM vs. MEMM}
+In addition to this corpus, we also use the Brown corpus. The Brown corpus is a collection of 500 text documents from 1961 sampled from various genres and sources ranging from fiction, press, and lore~\cite{brownCorpus}.
+\section{HMM vs. MEM,}
 A HMM is generative model for the joint distribution of states and observations. It follows a Markovian assumptions. The Markov assumption restricts the transitions between states to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM is discriminative since it models the conditional probability of the state given the observation. 
 
-An MEMM is an enhancement on the Maximum Entropy model, also known as a multinomial regression model which in turn attempts to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows the pictorial differences between both graphical models. The added benefit of MEMMs over HMMs is that MEMMs are not limited to only modelling two aspects: $P( S_i | P_{i-1} )$ and $P( O_i | S_i )$. Instead, MEMMs consider information derived directly from the observation through the use of features applied on the observation in addition to the previous state knowledge. For example, capitalization often occurs with Nouns, specific suffixes such as "ed" and "ing" tend to be associated with Verbs are some useful features that can not be modelled by an HMM but can be modelled by an MEMM. Moreover, the viterbi algorithm can be trivially modified to solve the decoding problem in an MEMM~\cite{nlpBook}.
-\begin{figure}[ht!]
+An MEMM is an enhancement on the Maximum Entropy model, also known as a multinomial regression model which in turn attempts to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows the pictorial differences between both graphical models. The added benefit of MEMMs over HMMs is that MEMMs are not limited to only modelling two aspects: $P( S_i | P_{i-1} )$ and $P( O_i | S_i )$. Instead, MEMMs consider information derived directly from features applied on the observation in addition to the previous state knowledge. For example, capitalization often occurs with Nouns and specific suffixes such as "ed" and "ing" tend to be associated with Verbs are some useful features that can not be modelled by an HMM but can be modelled by an MEMM. Moreover, the typical algorithm used to solve the decoding problem in an HMM can be trivially modified to solve the decoding problem in an MEMM without additional overhead~\cite{nlpBook}.
+\begin{figure}[ht]
 \centering
-\includegraphics[width=40mm]{figures/memm.png}
+\includegraphics[width=80mm]{figures/memm.png}
 \caption{Hidden Markov Model(top) and Maximum Entropy Markov Model(bottom)~\cite{nlpBook} \label{hmmVmemm}}
 \end{figure}
+
+\section{Learning}
 
 \bibliographystyle{abbrv}
 \bibliography{references}

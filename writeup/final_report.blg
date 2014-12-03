@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: final_report.aux
+The style file: abbrv.bst
+Database file #1: references.bib
+Warning--I didn't find a database entry for "memmImage"
+You've used 4 entries,
+            2118 wiz_defined-function locations,
+            536 strings with 4675 characters,
+and the built_in function-call counts, 1753 in all, are:
+= -- 165
+> -- 87
+< -- 3
++ -- 33
+- -- 28
+* -- 129
+:= -- 283
+add.period$ -- 14
+call.type$ -- 4
+change.case$ -- 23
+chr.to.int$ -- 0
+cite$ -- 4
+duplicate$ -- 72
+empty$ -- 137
+format.name$ -- 28
+if$ -- 384
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 5
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 30
+preamble$ -- 1
+purify$ -- 20
+quote$ -- 0
+skip$ -- 50
+stack$ -- 0
+substring$ -- 104
+swap$ -- 24
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 14
+warning$ -- 0
+while$ -- 15
+width$ -- 5
+write$ -- 49
+(There was 1 warning)

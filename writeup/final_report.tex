@@ -32,6 +32,9 @@
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{fixltx2e}
+\usepackage{moreverb}
+\usepackage{fancyvrb}
+\usepackage{csvsimple}
 \begin{document}
 
 \numberofauthors{2} 
@@ -51,11 +54,34 @@ William Xie\\
 
 \maketitle
 \section{Introduction}
-A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is a crucial tasks that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) tagging is an stepping stone into solving more complex problems such as syntactic parsing of sentences. The typical techniques used to solve this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the datasets used in this investigation. Then, we compare HMMs and MEMMs. Next, we discuss how the training process works for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar situations.
-\section{Datasets}
-In this investigation we use the Wall Street Journal (WSJ), a 3-year collection of 2,499 articles from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods~\cite{wsjCorpus}. 
+A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is the underlying problem that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) or lexical category tagging is an important problem because it serves as a stepping stone into solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models, HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the datasets used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
 
-In addition to this corpus, we also use the Brown corpus. The Brown corpus is a collection of 500 text documents from 1961 sampled from various genres and sources ranging from fiction, press, and lore~\cite{brownCorpus}.
+\section{Datasets}
+In this investigation we use two corpora. The first one is the Wall Street Journal (WSJ) corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible tags~cite{wsjCorpus}. Its range of topics is very narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora as well. Hence, we expect better performance when we test with this metric.
+
+In addition to the WSJ corpus, we also use the Brown corpus. The Brown corpus is a manually tagged collection of 500 text documents sampled from 1961. It uses 36 POS tags and it is consolidated from various sources and from various topics such as fiction, press, and lore~\cite{brownCorpus}. Consequently, we expect that this corpus would represent a more general distribution on word choice than WSJ corpus. Therefore, we expect scores to be slightly lower than when using WSJ.
+
+\begin{figure}[ht]
+ \begin{Verbatim}[frame=single,framesep=5mm]
+\[ He/PRP \]
+tried/VBD to/TO ignore/VB 
+\[ what/WP \]
+
+\[ his/PRP\$ own/JJ common/JJ sense/NN \]
+told/VBD 
+\[ him/PRP \]
+,/, but/CC 
+\[ it/PRP \]
+
+\[ was/VBD n't/RB possible/JJ \]
+;/: ;/: 
+\[ her/PRP$ motives/NNS \]
+were/VBD too/RB blatant/JJ ./.
+
+\end{Verbatim}
+\caption{Example sentence from the Brown Corpus~\cite{brownCorpus} \label{brownExample}}
+\end{figure}
+
 \section{HMM vs. MEM,}
 A HMM is generative model for the joint distribution of states and observations. It follows a Markovian assumptions. The Markov assumption restricts the transitions between states to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM is discriminative since it models the conditional probability of the state given the observation. 
 
@@ -67,7 +93,29 @@ An MEMM is an enhancement on the Maximum Entropy model, also known as a multinom
 \end{figure}
 
 \section{Learning}
+In order to train our HMM model in a supervised manner
 
+\section{Laplace Smoothing}
+\section{Experiment}
+\begin{figure}[ht]
+  \begin{tabular}{ l || c | c | c | c | c }
+    \bfseries Corpus & \bfseries Train/Test & \bfseries \overline{Sentences} & \bfseries \sigma Sentences & \bfseries \overline{Tags} & \bfseries \sigma Tags
+    
+    \csvreader[head to column names]{figures/hmmScores.csv}{}% use head of csv as column names
+    {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
+    \end{tabular}
+    \caption{HMM scores for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Testing with training data will give us an idea of overfitting and testing with testing data will give us an idea of effectiveness of the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{hmmScores}}
+\end{figure}
+
+\begin{figure}[ht]
+  \begin{tabular}{ l || c | c | c | c | c }
+    \bfseries Corpus & \bfseries Train/Test & \bfseries \overline{Sentences} & \bfseries \sigma Sentences & \bfseries \overline{Tags} & \bfseries \sigma Tags
+    
+%    \csvreader[head to column names]{figures/hmmScores.csv}{}% use head of csv as column names
+%    {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
+    \end{tabular}
+    \caption{MEMM scores for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Testing with training data will give us an idea of overfitting and testing with testing data will give us an idea of effectiveness of the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{memmScores}}
+\end{figure}
 \bibliographystyle{abbrv}
 \bibliography{references}
 \end{document}

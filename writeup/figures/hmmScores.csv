@@ -1,0 +1,5 @@
+Corpus,Train/Test,AVG Correct Sentences,STDDEV Correct Sentences,AVG Correct Tags,STDDEV CorrectTags
+Brown,Test,20.61%,10.36%,81.89%,17.35%
+Brown,Train,63.18%,9.71%,97.17%,0.81%
+WSJ,Test,7.21%,2.99%,82.23%,18.10%
+WSJ,Train,31.59%,16.56%,94.56%,1.63%

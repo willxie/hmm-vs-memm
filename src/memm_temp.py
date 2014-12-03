@@ -304,8 +304,8 @@ def MEMMViterbi(TPM, Pi_state_index, word_sequence, map_symbol_index, map_POS_in
 # # test section
 numpy.set_printoptions(threshold=sys.maxint)
 
-sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp3", 1)
-# sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 10)
+# sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp3", 1)
+sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown/", 1000)
 # sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp2", 10)
 # sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp/", 1)
 #sentences2 = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_bak/pos/brown/ca/", 10)
@@ -318,7 +318,6 @@ N = len(POS_tagsSeen)
 M = len(symbolsSeen)
 map_index_symbol =  {v: k for k, v in map_symbol_index.items()}
 map_index_POS =  {v: k for k, v in map_POS_index.items()}
-#m = countWords(sentences)
 
 iter_count = 0
 epsilon = 0.01 		# This is convergence threshold for Lambda
@@ -339,23 +338,25 @@ F = buildAverageFeature(buckets, map_POS_index, max_num_features, last_feature_l
 Lambda = initLambda(F)
 E = initExpectation(F)
 
-# # GIS, run until convergence
-# while True:
-# 	Lambda0 = copy.deepcopy(Lambda)
-# 	for tag in map_POS_index:
-# 		buildTPM(TPM, Lambda, max_num_features, map_index_symbol, map_index_POS, map_POS_index, last_feature_list, tag)
-# 	for tag in map_POS_index:
-# 		buildExpectation(E, buckets[tag], max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS, tag)
-# 	for tag in map_POS_index:
-# 		buildNextLambda(Lambda, C, F, E, tag)
-# 	iter_count += 1
+# GIS, run until convergence
+while True:
+	Lambda0 = copy.deepcopy(Lambda)
+	for tag in map_POS_index:
+		buildTPM(TPM, Lambda, max_num_features, map_index_symbol, map_index_POS, map_POS_index, last_feature_list, tag)
+	for tag in map_POS_index:
+		buildExpectation(E, buckets[tag], max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS, tag)
+	for tag in map_POS_index:
+		buildNextLambda(Lambda, C, F, E, tag)
+	iter_count += 1
 
-# 	if checkLambdaConvergence(Lambda0, Lambda, epsilon):
-# 		print " ".join(["iter_count:", str(iter_count)])
-# 		break;
+	if checkLambdaConvergence(Lambda0, Lambda, epsilon):
+		print " ".join(["iter_count:", str(iter_count)])
+		break;
 
-# numpy.save("TPM_current", TPM)
-# numpy.save("Lambda_current", Lambda)
+numpy.save("TPM_current", TPM)
+numpy.save("Lambda_current", Lambda)
+
+print("training done")
 
 
 #TEST for MATT
@@ -454,8 +455,8 @@ numpy.set_printoptions(threshold=sys.maxint)
 
 sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data/pos/brown", 100)
 
-TPM = numpy.load("tpm_100_sen.npy")
-Lambda = numpy.load("Lambda_100_sen.npy")
+# TPM = numpy.load("tpm_100_sen.npy")
+# Lambda = numpy.load("Lambda_100_sen.npy")
 
 symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
 map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)

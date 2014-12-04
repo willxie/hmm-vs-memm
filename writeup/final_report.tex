@@ -26,6 +26,34 @@
 %
 % For tracking purposes - this is V3.1SP - APRIL 2009
 
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
 \documentclass{acm_proc_article-sp}
 
 \usepackage{url}
@@ -35,7 +63,7 @@
 \usepackage{moreverb}
 \usepackage{fancyvrb}
 \usepackage{csvsimple}
-\linespread{2}
+% \linespread{2}
 \begin{document}
 
 \numberofauthors{2}
@@ -58,9 +86,9 @@ William Xie\\
 [TODO:make it more motiviating]A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and part-of-speech tagging are just some of the examples where sequence labelling is being used.~\cite{dnaEx, videoEx, nlpEx}. In natural language Processing (NLP), part-of-speech (POS) or lexical category tagging is an important stepping stone to solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are hidden Markov models (HMM), maximum entropy markov models (MEMM), and conditional random fields (CRF)~\cite{nlpBook}. While CRF is considered to be the state-of-the-art for POS tagging, [TODO: why MEMM and HMM and not CRF]. [TODO: kinda redundant for such sort paper;also talka bout implementation]This paper is structured in the following way: first we provide a brief description of the corpora used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
 
 \section{Datasets}
-For this investigation we focus on two corpora: the Wall Street Journal (WSJ) corpus and the Brown corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal newspaper. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible POS tags~\cite{wsjCorpus}. The range of topics is relatively narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora. The Brown corpus is a manually tagged collection of 500 text documents sampled from 1961. It uses 36 POS tags and it is consolidated from various sources and from various topics such as fiction, press, and lore~\cite{brownCorpus}. Consequently, we expect this corpus to represent a more general distribution on word choice than WSJ corpus.
+For this investigation we focus on two corpora: the Wall Street Journal (WSJ) corpus and the Brown corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal newspaper. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible POS tags~\cite{wsjCorpus}. On the other hand, the Brown corpus is a manually tagged collection of 500 text documents sampled from 1961. It uses 36 POS tags and it is consolidated from various sources and from various topics such as fiction, press, and lore~\cite{brownCorpus}. 
 
-These two corpora are chosen because they are standards of field, making them easy to obtain and benchmark performance with. In addition, they represent different extremes in distributions of words. We expect WSJ corpus's performance to be better than Brown's because of this.
+These two corpora are chosen because they are standards of the field, making them easy to obtain and allow us to compare our results with the NLP literature. In addition, they represent different extremes in distributions of words. The range of topics for the WSJ corpus is relatively narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora. Using similar logic, we expect the Brown corpus to represent a more general distribution on word choice. Therefore, by using two contrasting corpora we will be able to gauge the performance of the models in a broader set of problems in which POS tagging is be used.
 
 \begin{figure}[ht]
  \begin{Verbatim}[frame=single,framesep=5mm]
@@ -82,12 +110,12 @@ were/VBD too/RB blatant/JJ ./.
 \caption{Example sentence from the Brown Corpus~\cite{brownCorpus} \label{brownExample}}
 \end{figure}
 
-\section{HMM vs. MEM,}
-The HMM is generative model for the joint distribution of states (POS tags) and observations (words). The state transition follows the Markov assumption. In other words, the transitions between states is restricted to be dependent only on the immediate past following the Markov property~\cite{nlpBook}. On the other hand, MEMM extends the maximum entropy classifier. It is a discriminative model that captures the conditional probability of the current state given the observation and the previous state.
+\section{HMM vs. MEMM}
+The HMM is generative model for the joint distribution of states (POS tags) and observations (words). The state transition follows the Markov assumption. In other words, the transitions between states is restricted to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM extends the maximum entropy classifier. It is a discriminative model that captures the conditional probability of the current state given the observation and the previous state. Figure \ref{hmmVmemm} shows pictorially the difference between both models.
 
-The MEMM, like the maximum entropy model it is based on, uses multinomial logistic regression to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows pictorially the differences between both graphical models. While the HMM only uses two aspects of the problem: the transition probabilities for states $P( S_i | S_{i-1} )$ and emission probabilities for current state and observation $P( O_i | S_i )$, MEMM integrates feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. For example, capitalization is closely associated with proper nouns and specific suffixes, such as "-ed" and "-ing", tend to be associated with verbs. These rules are useful features that can help improve the accuracy of the POS tagging not captured by the HMM. Moreover, this model can be augmented to include features involving additional past states and past or future observations~\cite{nlpBook}. Finally, the typical algorithms used to find the most probable state sequence for HMM can be modified for MEMM without additional overhead~\cite{memmPaper}.
+The MEMM, like the maximum entropy model it is based on, are multinomial logistic regressions to do classification but they focus on making the fewest number of assumptions. While the HMM only uses two aspects of the problem: the transition probabilities for states $P( S_i | S_{i-1} )$ and emission probabilities for current state and observation $P( O_i | S_i )$, MEMM integrates feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. For example, capitalization is closely associated with proper nouns and specific suffixes, such as "-ed" and "-ing", tend to be associated with verbs. These rules are useful features that can help improve the accuracy of the POS tagger not captured in the HMM model. Moreover, this model can be augmented to include features involving additional past states and past or future observations~\cite{nlpBook}. Finally, the typical algorithms used to find the most probable state sequence for HMM can be modified for MEMM without additional overhead~\cite{memmPaper}.
 
-However, MEMM is susceptible to the "label bias problem". This issue generally arises in two forms. First, if a state, $S_i$, has a high probability of transitioning to $S_j$ with $i \neq j$ (low entropy with the extreme case of probability from $S_i$ to $S_j$ is 1), the observation would be less influential during the decoding process. This occurs when a sequence of observations and the corresponding tags appears abnormally frequently in the training set. The other source of bias is during labeling phase. When an observation occurs infrequently in the training set leads to an inaccurate tag, the tags for subsequent observations are affacted by the error as well. \cite{labelBiasProblem}
+However, MEMM is susceptible to the "label bias problem". This issue generally arises in two forms. First, if a state, $S_i$, has a high probability of transitioning to $S_j$ with $i \neq j$ (low entropy with the extreme case of probability from $S_i$ to $S_j$ is 1), the observation would be less influential during the decoding process. This occurs when a sequence of observations and the corresponding tags appears abnormally frequently in the training set. The other source of bias is during labelling phase. When an observation occurs infrequently in the training set leads to an inaccurate tag, the tags for subsequent observations are affected by the error as well. \cite{labelBiasProblem}
 
 \begin{figure}[ht]
 \centering

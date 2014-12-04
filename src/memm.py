@@ -273,18 +273,29 @@ def MEMMViterbi(TPM, Pi_state_index, word_sequence, map_symbol_index, map_POS_in
 	# Note that because MEMM takes both state and obs as given, only consider for each state with fix obs
 	for j in range(N):
 		# Initial last tag is assumed to be Pi_state_index
-		word_index = map_symbol_index[word_sequence[0].upper()]
-		Delta[j, 0] = TPM[Pi_state_index*M+word_index][j]
-        
+		if word_sequence[0].upper() in map_symbol_index:
+			word_index = map_symbol_index[word_sequence[0].upper()]
+			Delta[j, 0] = TPM[Pi_state_index*M+word_index][j]
+        else:
+        	Delta[j, 0] = 1.0 / N
+
 	# Inductive Step:
 	for t in range(1, m):
-		word_index = map_symbol_index[word_sequence[t].upper()]
 		for j in range(N):			# For each destination state at t
-			temp = numpy.zeros(N, float)
-			for i in range(N):		# For each source state i at t - 1 to current state j
-				temp[i] = Delta[i, t-1] * TPM[i*M+word_index][j] # 1 x N vector that stores 
-			Delta[j, t] = temp.max()
-			Psi[j, t] = temp.argmax()
+			if word_sequence[t].upper() in map_symbol_index:
+				word_index = map_symbol_index[word_sequence[t].upper()]
+				temp = numpy.zeros(N, float)
+				for i in range(N):		# For each source state i at t - 1 to current state j
+					temp[i] = Delta[i, t-1] * TPM[i*M+word_index][j] # 1 x N vector that stores 
+				Delta[j, t] = temp.max()
+				Psi[j, t] = temp.argmax()
+			else:
+				temp = numpy.zeros(N, float)
+				for i in range(N):		# For each source state i at t - 1 to current state j
+					temp[i] = Delta[i, t-1]
+				Delta[j, t] = temp.max()
+				Psi[j, t] = temp.argmax()
+
 
 	# Calculate State Sequence, Q*, Q* contains a sequence of j's
 	# Q_star = [numpy.argmax(Delta[ :,m-1])] 
@@ -300,213 +311,3 @@ def MEMMViterbi(TPM, Pi_state_index, word_sequence, map_symbol_index, map_POS_in
 		Q_star.insert(0, Psi[Q_star[0],t+1])
 
 	return (Q_star, Delta, Psi)
-
-# # test section
-# Begin training
-numpy.set_printoptions(threshold=sys.maxint)
-
-# sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp3", 1)
-# sentences = readSentences("../data/pos/brown", 1000)
-# # sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp2", 10)
-# # sentences = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_temp/", 1)
-# #sentences2 = readSentences("/Volumes/Storage/git/graphical_models_memm_vs_hmm/data_bak/pos/brown/ca/", 10)
-
-# symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
-# map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)
-
-# # Note that (number of unique words) M <= m (number of words)
-# N = len(POS_tagsSeen)
-# M = len(symbolsSeen)
-# map_index_symbol =  {v: k for k, v in map_symbol_index.items()}
-# map_index_POS =  {v: k for k, v in map_POS_index.items()}
-
-# iter_count = 0
-# epsilon = 0.01 		# This is convergence threshold for Lambda
-# C = 6 						# This should be number of features + 1
-# max_num_features = C - 1
-# Lambda = {}
-# TPM = initTPM(map_index_symbol, map_index_POS)
-
-# # Divide (o,s) into |S| buckets
-# buckets = divideBuckets(sentences, map_POS_index)
-
-# last_feature_list =  buildLastFeature(max_num_features, C, map_index_symbol, map_index_POS)
-
-# # Initialize Lambda as 1 then learn from training data
-# # Lambda is different per s' (previous state)
-# F = buildAverageFeature(buckets, map_POS_index, max_num_features, last_feature_list)
-
-# Lambda = initLambda(F)
-# E = initExpectation(F)
-
-# # GIS, run until convergence
-# while True:
-# 	print("iteratoin = {0}", iter_count)
-# 	Lambda0 = copy.deepcopy(Lambda)
-# 	for tag in map_POS_index:
-# 		buildTPM(TPM, Lambda, max_num_features, map_index_symbol, map_index_POS, map_POS_index, last_feature_list, tag)
-# 	for tag in map_POS_index:
-# 		buildExpectation(E, buckets[tag], max_num_features, last_feature_list, TPM, map_POS_index, map_symbol_index, map_index_POS, tag)
-# 	for tag in map_POS_index:
-# 		buildNextLambda(Lambda, C, F, E, tag)
-# 	iter_count += 1
-
-# 	if checkLambdaConvergence(Lambda0, Lambda, epsilon):
-# 		print " ".join(["iter_count:", str(iter_count)])
-# 		break;
-
-# numpy.save("TPM_current", TPM)
-# numpy.save("Lambda_current", Lambda)
-
-# print("training done")
-# End training
-
-#TEST for MATT; manually override TPM
-# i = map_POS_index["<S>"] # I
-# k = map_symbol_index["MATT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["SAW"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.2
-# TPM[i*M+k][map_POS_index["V"]] = 0.8
-# k = map_symbol_index["THE"]
-# TPM[i*M+k][map_POS_index["D"]] = 1
-# k = map_symbol_index["CAT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["<S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<\\S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-
-
-# i = map_POS_index["N"] 
-# k = map_symbol_index["MATT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["SAW"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.2
-# TPM[i*M+k][map_POS_index["V"]] = 0.8
-# k = map_symbol_index["THE"]
-# TPM[i*M+k][map_POS_index["D"]] = 1
-# k = map_symbol_index["CAT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["<S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<\\S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-
-
-# i = map_POS_index["V"] 
-# k = map_symbol_index["MATT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.8
-# TPM[i*M+k][map_POS_index["V"]] = 0.2
-# k = map_symbol_index["SAW"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.7
-# TPM[i*M+k][map_POS_index["V"]] = 0.3
-# k = map_symbol_index["THE"]
-# TPM[i*M+k][map_POS_index["D"]] = 1
-# k = map_symbol_index["CAT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.95
-# TPM[i*M+k][map_POS_index["V"]] = 0.05
-# k = map_symbol_index["<S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<\\S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-
-
-# i = map_POS_index["D"]
-# k = map_symbol_index["MATT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["SAW"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["THE"]
-# TPM[i*M+k][map_POS_index["D"]] = 1
-# k = map_symbol_index["CAT"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<\\S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-
-
-# i = map_POS_index["<\\S>"] # end state shouldn't matter
-# k = map_symbol_index["MATT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["SAW"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.2
-# TPM[i*M+k][map_POS_index["V"]] = 0.8
-# k = map_symbol_index["THE"]
-# TPM[i*M+k][map_POS_index["D"]] = 1
-# k = map_symbol_index["CAT"]
-# TPM[i*M+k][map_POS_index["N"]] = 0.9
-# TPM[i*M+k][map_POS_index["V"]] = 0.1
-# k = map_symbol_index["<S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-# k = map_symbol_index["<\\S>"]
-# TPM[i*M+k][map_POS_index["N"]] = 1
-
-# print(numpy.sum(TPM, axis=1))
-# print(TPM)
-#ENDTEST for MATT
-
-numpy.set_printoptions(threshold=sys.maxint)
-
-sentences = readSentences("../data/pos/brown", 100)
-
-TPM = numpy.load("tpm_100_sen.npy")
-Lambda = numpy.load("Lambda_100_sen.npy")
-
-symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
-map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)
-map_index_symbol =  {v: k for k, v in map_symbol_index.items()}
-map_index_POS =  {v: k for k, v in map_POS_index.items()}
-
-Pi_state_index = map_POS_index["<S>"]
-viterbi_tuple = []
-num_sentence = 0
-num_sentence_correct = 0
-num_tags_correct = 0
-num_tags = 0 
-
-for sentence in sentences:
-	word_sequence = []
-	pos_sequence = []
-
-	# word_sequence.append('<S>')
-	# pos_sequence.append('<S>')
-	for word, tag in sentence:
-		word_sequence.append(word)
-		pos_sequence.append(tag)
-	# word_sequence.append('<\S>')
-	# pos_sequence.append('<\S>')
-
-	m = len(word_sequence)
-	if m == 0:
-		continue
-
-	viterbi_tuple = MEMMViterbi(TPM, Pi_state_index, word_sequence, map_symbol_index, map_POS_index)
-	viterbi_sequence = [map_index_POS[x] for x in viterbi_tuple[0]]
-
-	print("sentence {0}".format(num_sentence))
-	print(word_sequence)
-	print("*"*80)
-	print(viterbi_sequence)
-	print("*"*80)
-	print(pos_sequence)
-	print("*"*80)
-
-	if viterbi_sequence == pos_sequence:
-		num_sentence_correct += 1
-	num_sentence += 1
-
-	for x, y in zip(pos_sequence, viterbi_sequence):
-		if x == y:
-			num_tags_correct += 1
-		num_tags += 1
-
-print num_sentence_correct/float(num_sentence)
-print num_tags_correct/float(num_tags)

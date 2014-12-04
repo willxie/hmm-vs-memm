@@ -1,5 +1,5 @@
 Corpus,Train/Test,AVG Correct Sentences,STDDEV Correct Sentences,AVG Correct Tags,STDDEV CorrectTags
 Brown,Test,27.93,7.38,89.83,2.91
 Brown,Train,57.06,0.39,96.54,0.04
-WSJ,Test,10.26,2.04,89.55,1.27
-WSJ,Train,24.47,0.16,93.60,0.21
+WSJ,Test,7.21,2.99,82.23,18.1
+WSJ,Train,31.59,16.56,94.56,1.63

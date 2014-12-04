@@ -3,46 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: final_report.aux
 The style file: abbrv.bst
 Database file #1: references.bib
-Warning--I didn't find a database entry for "memmAhmmResults"
-You've used 9 entries,
+You've used 10 entries,
             2118 wiz_defined-function locations,
-            570 strings with 5503 characters,
-and the built_in function-call counts, 3305 in all, are:
-= -- 326
-> -- 145
+            573 strings with 5581 characters,
+and the built_in function-call counts, 3504 in all, are:
+= -- 343
+> -- 152
 < -- 5
-+ -- 56
-- -- 46
-* -- 207
-:= -- 526
-add.period$ -- 29
-call.type$ -- 9
-change.case$ -- 48
++ -- 59
+- -- 48
+* -- 213
+:= -- 560
+add.period$ -- 31
+call.type$ -- 10
+change.case$ -- 52
 chr.to.int$ -- 0
-cite$ -- 9
-duplicate$ -- 138
-empty$ -- 273
-format.name$ -- 46
-if$ -- 733
+cite$ -- 10
+duplicate$ -- 145
+empty$ -- 295
+format.name$ -- 48
+if$ -- 776
 int.to.chr$ -- 0
-int.to.str$ -- 9
+int.to.str$ -- 10
 missing$ -- 7
-newline$ -- 46
-num.names$ -- 22
-pop$ -- 66
+newline$ -- 50
+num.names$ -- 24
+pop$ -- 75
 preamble$ -- 1
-purify$ -- 39
+purify$ -- 42
 quote$ -- 0
-skip$ -- 107
+skip$ -- 114
 stack$ -- 0
-substring$ -- 185
-swap$ -- 45
+substring$ -- 190
+swap$ -- 46
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 34
+type$ -- 38
 warning$ -- 0
-while$ -- 31
-width$ -- 10
-write$ -- 102
-(There was 1 warning)
+while$ -- 33
+width$ -- 12
+write$ -- 110

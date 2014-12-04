@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{wsjCorpus}
 E.~Charniak.
@@ -10,6 +10,10 @@ W.~Ching, E.~Fung, and M.~Ng.
 \newblock In J.~Liu, Y.-m. Cheung, and H.~Yin, editors, {\em Intelligent Data
   Engineering and Automated Learning}, volume 2690 of {\em Lecture Notes in
   Computer Science}, pages 535--539. Springer Berlin Heidelberg, 2003.
+
+\bibitem{memmAhmmResultsACL}
+A.~W. for Computational~Linguistics.
+\newblock Pos tagging (state of the art), 2014.
 
 \bibitem{brownCorpus}
 W.~N. Francis and H.~Kucera.

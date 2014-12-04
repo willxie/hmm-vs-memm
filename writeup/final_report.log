@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.24)  3 DEC 2014 20:04
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.24)  4 DEC 2014 13:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -268,18 +268,18 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 ) (./final_report.aux)
 \openout1 = `final_report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
-LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count126
@@ -342,46 +342,63 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 \c@lstlisting=\count132
-LaTeX Font Info:    Try loading font information for U+msa on input line 55.
+LaTeX Font Info:    Try loading font information for U+msa on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 55.
+LaTeX Font Info:    Try loading font information for U+msb on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 55.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for T1+aett on input line 65.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 66.
 
 (/usr/share/texlive/texmf-dist/tex/latex/ae/t1aett.fd
 File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 )
-<figures/memm.png, id=1, 457.71pt x 247.92625pt>
-File: figures/memm.png Graphic file (type png)
- <use figures/memm.png>
-Package pdftex.def Info: figures/memm.png used on input line 90.
-(pdftex.def)             Requested size: 227.62204pt x 123.29321pt.
+Underfull \vbox (badness 2020) has occurred while \output is active []
 
-Overfull \hbox (4.94994pt too wide) in paragraph at lines 87--93
+ [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+Overfull \hbox (4.94994pt too wide) in paragraph at lines 88--89
 \T1/aer/m/n/9 mod-elling two as-pects: the tran-si-tion prob-a-bil-i-ties $\OML
 /cmm/m/it/9 P\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 S[]\OMS/cmsy/m/n/9 j\OML/cmm/m/it/
 9 S[]\OT1/cmr/m/n/9 )$
  []
 
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-]
+<figures/memm.png, id=9, 457.71pt x 247.92625pt>
+File: figures/memm.png Graphic file (type png)
+ <use figures/memm.png>
+Package pdftex.def Info: figures/memm.png used on input line 93.
+(pdftex.def)             Requested size: 227.62204pt x 123.29321pt.
+
+Overfull \hbox (5.71257pt too wide) in paragraph at lines 90--96
+[]\T1/aer/m/n/9 Another dif-fer-ence be-tween HMM and MEMM is that MEMM
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+Underfull \vbox (badness 7540) has occurred while \output is active []
+
+
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...\bfseries & \bfseries \overline{Sentence}
+l.119 ...\bfseries & \bfseries \overline{Sentence}
                                                    & \bfseries \sigma Senten...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -389,7 +406,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.116 ...fseries & \bfseries \overline{Sentence} &
+l.119 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -400,7 +417,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...fseries & \bfseries \overline{Sentence} &
+l.119 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -408,7 +425,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.116 ...fseries & \bfseries \overline{Sentence} &
+l.119 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -419,7 +436,7 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...es \overline{Sentence} & \bfseries \sigma
+l.119 ...es \overline{Sentence} & \bfseries \sigma
                                                    Sentence & \bfseries \ove...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -427,7 +444,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+l.119 ...e{Sentence} & \bfseries \sigma Sentence &
                                                    \bfseries \overline{Tag} ...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -438,7 +455,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+l.119 ...e{Sentence} & \bfseries \sigma Sentence &
                                                    \bfseries \overline{Tag} ...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -446,7 +463,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+l.119 ...e{Sentence} & \bfseries \sigma Sentence &
                                                    \bfseries \overline{Tag} ...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -457,7 +474,7 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...sigma Sentence & \bfseries \overline{Tag}
+l.119 ...sigma Sentence & \bfseries \overline{Tag}
                                                    & \bfseries \sigma Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -465,7 +482,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.116 ...gma Sentence & \bfseries \overline{Tag} &
+l.119 ...gma Sentence & \bfseries \overline{Tag} &
                                                    \bfseries \sigma Tag
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -476,7 +493,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...gma Sentence & \bfseries \overline{Tag} &
+l.119 ...gma Sentence & \bfseries \overline{Tag} &
                                                    \bfseries \sigma Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -484,7 +501,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.116 ...gma Sentence & \bfseries \overline{Tag} &
+l.119 ...gma Sentence & \bfseries \overline{Tag} &
                                                    \bfseries \sigma Tag
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -495,7 +512,7 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.116 ...fseries \overline{Tag} & \bfseries \sigma
+l.119 ...fseries \overline{Tag} & \bfseries \sigma
                                                    Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -503,7 +520,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \endtemplate 
-l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+l.122 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
                                                   % specify your coloumns here
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -514,7 +531,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+l.122 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
                                                   % specify your coloumns here
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -522,7 +539,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+l.122 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
                                                   % specify your coloumns here
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -530,18 +547,18 @@ With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
+[3 <./figures/memm.png>] (./final_report.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-LaTeX Warning: Citation `memmAhmmResultsACL' on page \thepage  undefined on inp
-ut line 124.
-
-(./final_report.bbl [2 <./figures/memm.png>]) [3
+ [4])
+[5
 
 ] (./final_report.aux) ) 
 Here is how much of TeX's memory you used:
- 5117 strings out of 494989
- 74608 string characters out of 6180577
- 141471 words of memory out of 5000000
- 8211 multiletter control sequences out of 15000+600000
+ 5125 strings out of 494989
+ 74734 string characters out of 6180577
+ 139483 words of memory out of 5000000
+ 8218 multiletter control sequences out of 15000+600000
  47803 words of font info for 66 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  41i,10n,51p,1300b,301s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -557,9 +574,9 @@ ic/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvb8
 a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb>
-Output written on final_report.pdf (3 pages, 180901 bytes).
+Output written on final_report.pdf (5 pages, 184037 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
+ 68 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

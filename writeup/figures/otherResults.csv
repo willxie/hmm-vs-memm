@@ -1,0 +1,7 @@
+Corpus,Model,Accuracy,Authors
+Brown,HMM,89.83,
+Brown,MEMM,,
+WSJ,HMM,89.55,
+WSJ,MEMM,,
+WSJ,HMM,96.46,Brants
+WSJ,MEMM,96.96,Denis and Sagot

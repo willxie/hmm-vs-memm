@@ -35,6 +35,7 @@
 \usepackage{moreverb}
 \usepackage{fancyvrb}
 \usepackage{csvsimple}
+\linespread{2}
 \begin{document}
 
 \numberofauthors{2} 
@@ -54,7 +55,7 @@ William Xie\\
 
 \maketitle
 \section{Introduction}
-A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is the underlying problem that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) or lexical category tagging is an important problem because it serves as a stepping stone into solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models, HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the corpora used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
+A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is the underlying problem that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) or lexical category tagging is an important problem because it serves as a stepping stone into solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF)~\cite{nlpBook}. While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models, HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the corpora used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
 
 \section{Datasets}
 In this investigation we use two corpora. The first one is the Wall Street Journal (WSJ) corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible tags~\cite{wsjCorpus}. Its range of topics is very narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora as well. Hence, we expect better performance when we test with this metric.
@@ -85,6 +86,8 @@ were/VBD too/RB blatant/JJ ./.
 A HMM is generative model for the joint distribution of states and observations. It follows a Markov assumption. In other words, it is the assumption that restricts the transitions between states to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM is discriminative since it models the conditional probability of the current state given the observation and the prior state. 
 
 An MEMM is an enhancement on the Maximum Entropy model, also known as a multinomial regression model which in turn attempts to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows pictorially the differences between both graphical models. The benefit of MEMMs over HMMs is that MEMMs are not limited to only modelling two aspects: the transition probabilities $P( S_i | S_{i-1} )$ and emission probabilities $P( O_i | S_i )$. Instead, MEMMs can integrate feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. For example, capitalization often occurs with Nouns and specific suffixes such as "-ed" and "-ing" tend to be associated with Verbs are useful features that can not be modelled by an HMM but can be easily modelled by an MEMM. Moreover, this model does not restrict us to only analysing the current observation. It is entirely possible to have features that take observations that occur in the neighbourhood of the current observation~\cite{nlpBook}. Finally, the typical algorithm used to solve the decoding problem in an HMM can be trivially modified to solve the decoding problem in an MEMM without additional overhead~\cite{memmPaper}.
+
+Another difference between HMM and MEMM is that MEMM is susceptible to the "label bias problem". This issue generally arises in two forms, differences in entropy in the states and uncertainty during testing. Whenever there are states with small entropy (fewer outgoing edges) then the observation will be less influential during the decoding process (the extreme case being when the state only has one outgoing edge). In POS tagging this takes the form of having observations that are abnormally more frequent in the dataset. The other source of label bias is during the decoding process. During training of the model
 \begin{figure}[ht]
 \centering
 \includegraphics[width=80mm]{figures/memm.png}
@@ -121,7 +124,20 @@ The following tables show the results for both models when we execute our experi
     \caption{HMM percent scores (\%) for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{hmmScores}}
 \end{figure}
 
-Given that our implementation of MEMM performs considerably worse than expected (possibly caused by a bug or GIS is converging at a local maxima), we can not directly compare the performance of both models for POS tagging as we would have liked. Ideally, we would compare not only the overall performance of the models but also determine which POS tags had a boost in accuracy and also which ones decreased. From our intuition by adding features that help Noun or Verb tagging we should see an increase in performance for Noun and Verbs in MEMMs. Never the less, the literature shows that MEMM tend to outperform HMM in POS tagging. Brants reports that their HMM POS tagger reaches 96.46\% accuracy in the WSJ corpus while Denis and Sagot's MEMM tagger correctly tags sentences in WSJ 96.96\% of the time~\cite{memmAhmmResultsACL}. 
+Given that our implementation of MEMM performs considerably worse than expected (possibly caused by a bug or GIS is converging at a local maxima), we can not directly compare the performance of both models for POS tagging as we would have liked. Ideally, we would compare not only the overall performance of the models but also determine which POS tags had a boost in accuracy and also which ones decreased. From our intuition by adding features that help Noun or Verb tagging we should see an increase in performance for Noun and Verbs in MEMMs. 
+
+Never the less, the literature shows that MEMM tend to outperform HMM in POS tagging. Brants reports that their HMM POS tagger reaches 96.46\% accuracy in the WSJ corpus while Denis and Sagot's MEMM tagger correctly tags sentences in WSJ 96.96\% of the time~\cite{memmAhmmResultsACL}. Figure ~\ref{allScores} shows the results for various experiments in POS tagging.
+
+\begin{figure}[ht]
+  \begin{tabular}{ l | c | c | c | c | r }
+    \bfseries Corpus & \bfseries Model & \bfseries Accuracy & \bfseries Authors
+    
+    \csvreader[head to column names]{figures/otherResults.csv}{}% use head of csv as column names
+    {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}% specify your coloumns here
+    \end{tabular}
+    \caption{Accuracy results for various POS tagging experiments. The empty author cells represent our experiments \label{allScores}}
+\end{figure}
+
 \bibliographystyle{abbrv}
 \bibliography{references}
 \end{document}

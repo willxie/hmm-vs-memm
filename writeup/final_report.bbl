@@ -11,11 +11,21 @@ W.~Ching, E.~Fung, and M.~Ng.
   Engineering and Automated Learning}, volume 2690 of {\em Lecture Notes in
   Computer Science}, pages 535--539. Springer Berlin Heidelberg, 2003.
 
+\bibitem{hmmCode}
+A.~W. for Computational~Linguistics.
+\newblock Software, 2011.
+
 \bibitem{brownCorpus}
 W.~N. Francis and H.~Kucera.
 \newblock Brown corpus manual.
 \newblock Technical report, Department of Linguistics, Brown University,
   Providence, Rhode Island, US, 1979.
+
+\bibitem{laplaceSmooth}
+D.~Freitag and A.~McCallum.
+\newblock Information extraction with hmms and shrinkage.
+\newblock In {\em Proceedings of the AAAI-99 workshop on machine learning for
+  information extraction}, pages 31--36. Orlando, Florida, 1999.
 
 \bibitem{nlpEx}
 F.~Hasan, N.~UzZaman, and M.~Khan.
@@ -29,6 +39,14 @@ F.~Hasan, N.~UzZaman, and M.~Khan.
 D.~Jurafsky and J.~H. Martin.
 \newblock {\em Speech and Language Processing (2Nd Edition)}.
 \newblock Prentice-Hall, Inc., Upper Saddle River, NJ, USA, 2009.
+
+\bibitem{memmPaper}
+A.~McCallum, D.~Freitag, and F.~C.~N. Pereira.
+\newblock Maximum entropy markov models for information extraction and
+  segmentation.
+\newblock In {\em Proceedings of the Seventeenth International Conference on
+  Machine Learning}, ICML '00, pages 591--598, San Francisco, CA, USA, 2000.
+  Morgan Kaufmann Publishers Inc.
 
 \bibitem{videoEx}
 G.~Xu, Y.-F. Ma, H.-J. Zhang, and S.-Q. Yang.

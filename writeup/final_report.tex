@@ -54,10 +54,10 @@ William Xie\\
 
 \maketitle
 \section{Introduction}
-A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is the underlying problem that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) or lexical category tagging is an important problem because it serves as a stepping stone into solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models, HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the datasets used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
+A frequent problem in many disciplines is the challenge to do sequence labelling. DNA sequencing, video semantic analysis, and Part-Of-Speech tagging are just some examples where sequence labelling is the underlying problem that needs to be solved~\cite{dnaEx, videoEx, nlpEx}. In Natural Language Processing (NLP), Part-Of-Speech (POS) or lexical category tagging is an important problem because it serves as a stepping stone into solving more complex problems such as semantic analysis of sentences. The typical techniques applied to this problem are Hidden Markov Models (HMM), Maximum Entropy Markov Models (MEMM), and Conditional Random Fields (CRF). While CRFs are considered to be the state-of-the-art in POS tagging we want to compare the performance of the other models, HMM and MEMM. This paper is structured in the following way: first we provide a brief description of the corpora used in this investigation. Then, we discuss some of the differences between HMMs and MEMMs. Next, we explain how the training process works specifically for POS tagging. Finally, we compare the performance of HMMs vs MEMMs under similar circumstances.
 
 \section{Datasets}
-In this investigation we use two corpora. The first one is the Wall Street Journal (WSJ) corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible tags~cite{wsjCorpus}. Its range of topics is very narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora as well. Hence, we expect better performance when we test with this metric.
+In this investigation we use two corpora. The first one is the Wall Street Journal (WSJ) corpus. The WSJ corpus is a collection of 2,499 articles collected in a span of three years from the Wall Street Journal. It has approximately 3 million words and was tagged by using statistically-based methods. This corpus has a total of 82 possible tags~\cite{wsjCorpus}. Its range of topics is very narrow and thus it is reasonable to expect that the word choice distribution in the articles to be narrower than other corpora as well. Hence, we expect better performance when we test with this metric.
 
 In addition to the WSJ corpus, we also use the Brown corpus. The Brown corpus is a manually tagged collection of 500 text documents sampled from 1961. It uses 36 POS tags and it is consolidated from various sources and from various topics such as fiction, press, and lore~\cite{brownCorpus}. Consequently, we expect that this corpus would represent a more general distribution on word choice than WSJ corpus. Therefore, we expect scores to be slightly lower than when using WSJ.
 
@@ -77,45 +77,50 @@ told/VBD
 ;/: ;/: 
 \[ her/PRP$ motives/NNS \]
 were/VBD too/RB blatant/JJ ./.
-
 \end{Verbatim}
 \caption{Example sentence from the Brown Corpus~\cite{brownCorpus} \label{brownExample}}
 \end{figure}
 
 \section{HMM vs. MEM,}
-A HMM is generative model for the joint distribution of states and observations. It follows a Markovian assumptions. The Markov assumption restricts the transitions between states to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM is discriminative since it models the conditional probability of the state given the observation. 
+A HMM is generative model for the joint distribution of states and observations. It follows a Markov assumption. In other words, it is the assumption that restricts the transitions between states to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM is discriminative since it models the conditional probability of the current state given the observation and the prior state. 
 
-An MEMM is an enhancement on the Maximum Entropy model, also known as a multinomial regression model which in turn attempts to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows the pictorial differences between both graphical models. The added benefit of MEMMs over HMMs is that MEMMs are not limited to only modelling two aspects: $P( S_i | P_{i-1} )$ and $P( O_i | S_i )$. Instead, MEMMs consider information derived directly from features applied on the observation in addition to the previous state knowledge. For example, capitalization often occurs with Nouns and specific suffixes such as "ed" and "ing" tend to be associated with Verbs are some useful features that can not be modelled by an HMM but can be modelled by an MEMM. Moreover, the typical algorithm used to solve the decoding problem in an HMM can be trivially modified to solve the decoding problem in an MEMM without additional overhead~\cite{nlpBook}.
+An MEMM is an enhancement on the Maximum Entropy model, also known as a multinomial regression model which in turn attempts to do classification by making the fewest number of assumptions. Figure \ref{hmmVmemm} shows pictorially the differences between both graphical models. The benefit of MEMMs over HMMs is that MEMMs are not limited to only modelling two aspects: the transition probabilities $P( S_i | S_{i-1} )$ and emission probabilities $P( O_i | S_i )$. Instead, MEMMs can integrate feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. For example, capitalization often occurs with Nouns and specific suffixes such as "-ed" and "-ing" tend to be associated with Verbs are useful features that can not be modelled by an HMM but can be easily modelled by an MEMM. Moreover, the typical algorithm used to solve the decoding problem in an HMM can be trivially modified to solve the decoding problem in an MEMM without additional overhead~\cite{memmPaper}.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=80mm]{figures/memm.png}
-\caption{Hidden Markov Model(top) and Maximum Entropy Markov Model(bottom)~\cite{nlpBook} \label{hmmVmemm}}
+\caption{Hidden Markov Model(top) and Maximum Entropy Markov Model(bottom)~\cite{nlpBook}. \label{hmmVmemm}}
 \end{figure}
 
 \section{Learning}
-In order to train our HMM model in a supervised manner
+In POS tagging, training an HMM model in a supervised fashion reduces to a simple counting procedure~\cite{nlpBook}. In order to estimate $P( S_i | S_{i-1} )$ and $P( O_i | S_i )$, we can assume that our annotated corpus is a representative sample of the distribution we want to model, we can then define the latter quantities as follows:
 
-\section{Laplace Smoothing}
+$P( S_i | S_{i-1} ) \approx \hat{P}( S_i | S_{i-1} ) = C( S_i, S_{i-1} )/C( S_{i-1} )$
+
+$P( O_i | S_i ) \approx \hat{P}( O_i | S_i ) = C( O_i, S_i )/C( S_i )$
+
+where $\hat{P}$ is the probability with respect to the corpus and $C( O_i, S_i ), C( S_i, S_{i-1} )$, and $C( S_i )$ are the appropriate occurrence and co-occurrence of the observations and states.
+
+However there is one additional issue that needs to be addressed before the model can be used for tagging, how should the model respond to words it did not encounter during training? If left unattended then $P( O_i | S_i ) = 0$. Consequently, Viterbi's algorithm will make incorrect decision during the decoding process. The technique we employ to address this issue is Laplace smoothing (also known as additive smoothing)~\cite{laplaceSmooth}. The general idea of this approach is that any every state will always have a small probability of producing a special symbol (in our case "<U>") and every time the model encounters an unknown word it will use $P( <U> | S_i )$ instead. The small probability is created by setting $C( <U>, S ) = 1$ and incrementing $C( S )$ for each state $S$ before calculating the emission probabilities and after calculating the transition probabilities.
+
+XXXXXXXX MEMM Learning TODO XXXXXXXXXXX
+
 \section{Experiment}
+All our code is implemented in Python. Also, we enhance an general HMM python module with additive smoothing~\cite{hmmCode}. Moreover, we implement MEMM in its entirety including the learning and decoding process. 
+
+XXXXXXXX MEMM BROKEN TODO XXXXXXXXXXX
+
+The following tables show the results for both models when we execute our experiments using cross-validation at 20 (train with 19 portions and test on 1). In addition to evaluating performance on the testing data we also evaluate the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
+
 \begin{figure}[ht]
   \begin{tabular}{ l || c | c | c | c | c }
-    \bfseries Corpus & \bfseries Train/Test & \bfseries \overline{Sentences} & \bfseries \sigma Sentences & \bfseries \overline{Tags} & \bfseries \sigma Tags
+    \bfseries & \bfseries & \bfseries \overline{Sentence} & \bfseries \sigma Sentence & \bfseries \overline{Tag} & \bfseries \sigma Tag
     
     \csvreader[head to column names]{figures/hmmScores.csv}{}% use head of csv as column names
     {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
     \end{tabular}
-    \caption{HMM scores for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Testing with training data will give us an idea of overfitting and testing with testing data will give us an idea of effectiveness of the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{hmmScores}}
+    \caption{HMM percent scores (\%) for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{hmmScores}}
 \end{figure}
 
-\begin{figure}[ht]
-  \begin{tabular}{ l || c | c | c | c | c }
-    \bfseries Corpus & \bfseries Train/Test & \bfseries \overline{Sentences} & \bfseries \sigma Sentences & \bfseries \overline{Tags} & \bfseries \sigma Tags
-    
-%    \csvreader[head to column names]{figures/hmmScores.csv}{}% use head of csv as column names
-%    {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
-    \end{tabular}
-    \caption{MEMM scores for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Testing with training data will give us an idea of overfitting and testing with testing data will give us an idea of effectiveness of the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{memmScores}}
-\end{figure}
 \bibliographystyle{abbrv}
 \bibliography{references}
 \end{document}

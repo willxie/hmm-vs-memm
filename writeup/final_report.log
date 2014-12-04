@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.24)  3 DEC 2014 10:56
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.9.24)  3 DEC 2014 19:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -365,17 +365,28 @@ File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
 <figures/memm.png, id=1, 457.71pt x 247.92625pt>
 File: figures/memm.png Graphic file (type png)
  <use figures/memm.png>
-Package pdftex.def Info: figures/memm.png used on input line 91.
+Package pdftex.def Info: figures/memm.png used on input line 90.
 (pdftex.def)             Requested size: 227.62204pt x 123.29321pt.
+
+Overfull \hbox (4.94994pt too wide) in paragraph at lines 87--93
+\T1/aer/m/n/9 mod-elling two as-pects: the tran-si-tion prob-a-bil-i-ties $\OML
+/cmm/m/it/9 P\OT1/cmr/m/n/9 (\OML/cmm/m/it/9 S[]\OMS/cmsy/m/n/9 j\OML/cmm/m/it/
+9 S[]\OT1/cmr/m/n/9 )$
+ []
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
+Overfull \hbox (3.06717pt too wide) in paragraph at lines 112--113
+\T1/aer/m/n/9 we ex-e-cute our ex-per-i-ments us-ing cross-validation at 20 (tr
+ain
+ []
+
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...ain/Test & \bfseries \overline{Sentences}
+l.116 ...\bfseries & \bfseries \overline{Sentence}
                                                    & \bfseries \sigma Senten...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -383,7 +394,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.102 ...n/Test & \bfseries \overline{Sentences} &
+l.116 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -394,7 +405,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...n/Test & \bfseries \overline{Sentences} &
+l.116 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -402,7 +413,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.102 ...n/Test & \bfseries \overline{Sentences} &
+l.116 ...fseries & \bfseries \overline{Sentence} &
                                                    \bfseries \sigma Sentence...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -413,16 +424,16 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...s \overline{Sentences} & \bfseries \sigma
-                                                   Sentences & \bfseries \ov...
+l.116 ...es \overline{Sentence} & \bfseries \sigma
+                                                   Sentence & \bfseries \ove...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.102 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
+l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+                                                   \bfseries \overline{Tag} ...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
@@ -432,16 +443,16 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
+l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+                                                   \bfseries \overline{Tag} ...
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.102 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
+l.116 ...e{Sentence} & \bfseries \sigma Sentence &
+                                                   \bfseries \overline{Tag} ...
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
 With luck, this will get me unwedged. But if you
@@ -451,16 +462,16 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...gma Sentences & \bfseries \overline{Tags}
-                                                   & \bfseries \sigma Tags
+l.116 ...sigma Sentence & \bfseries \overline{Tag}
+                                                   & \bfseries \sigma Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.102 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
+l.116 ...gma Sentence & \bfseries \overline{Tag} &
+                                                   \bfseries \sigma Tag
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
@@ -470,16 +481,16 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
+l.116 ...gma Sentence & \bfseries \overline{Tag} &
+                                                   \bfseries \sigma Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.102 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
+l.116 ...gma Sentence & \bfseries \overline{Tag} &
+                                                   \bfseries \sigma Tag
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
 With luck, this will get me unwedged. But if you
@@ -489,16 +500,16 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.102 ...series \overline{Tags} & \bfseries \sigma
-                                                   Tags
+l.116 ...fseries \overline{Tag} & \bfseries \sigma
+                                                   Tag
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \endtemplate 
-l.106     \end{tabular}
-                       
+l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+                                                  % specify your coloumns here
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
 you forgot something else, as in `\hbox{$x}'. In such cases
@@ -508,193 +519,31 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.106     \end{tabular}
-                       
+l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+                                                  % specify your coloumns here
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.106     \end{tabular}
-                       
+l.119 ...&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}
+                                                  % specify your coloumns here
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
 With luck, this will get me unwedged. But if you
 really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
-
-
-Overfull \hbox (46.25456pt too wide) in paragraph at lines 101--107
-[][] 
- []
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...ain/Test & \bfseries \overline{Sentences}
-                                                   & \bfseries \sigma Senten...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.112 ...n/Test & \bfseries \overline{Sentences} &
-                                                   \bfseries \sigma Sentence...
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...n/Test & \bfseries \overline{Sentences} &
-                                                   \bfseries \sigma Sentence...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.112 ...n/Test & \bfseries \overline{Sentences} &
-                                                   \bfseries \sigma Sentence...
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...s \overline{Sentences} & \bfseries \sigma
-                                                   Sentences & \bfseries \ov...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.112 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.112 ...Sentences} & \bfseries \sigma Sentences &
-                                                   \bfseries \overline{Tags}...
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...gma Sentences & \bfseries \overline{Tags}
-                                                   & \bfseries \sigma Tags
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.112 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.112 ...a Sentences & \bfseries \overline{Tags} &
-                                                   \bfseries \sigma Tags
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.112 ...series \overline{Tags} & \bfseries \sigma
-                                                   Tags
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \endtemplate 
-l.116     \end{tabular}
-                       
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.116     \end{tabular}
-                       
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.116     \end{tabular}
-                       
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-Overfull \hbox (46.25456pt too wide) in paragraph at lines 111--117
-[][] 
- []
 
 (./final_report.bbl) [2 <./figures/memm.png>] (./final_report.aux) ) 
 Here is how much of TeX's memory you used:
- 5114 strings out of 494989
- 74565 string characters out of 6180577
- 138470 words of memory out of 5000000
- 8208 multiletter control sequences out of 15000+600000
+ 5116 strings out of 494989
+ 74588 string characters out of 6180577
+ 140471 words of memory out of 5000000
+ 8210 multiletter control sequences out of 15000+600000
  47803 words of font info for 66 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 41i,10n,51p,1175b,308s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,10n,51p,1174b,301s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share
 /texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/t
@@ -708,7 +557,7 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
 1/urw/times/utmb8a.pfb>
-Output written on final_report.pdf (2 pages, 173029 bytes).
+Output written on final_report.pdf (2 pages, 178966 bytes).
 PDF statistics:
  59 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

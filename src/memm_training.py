@@ -3,7 +3,7 @@ from memm import *
 
 if len(sys.argv) == 1:
 	epsilon = 0.1 				# This is convergence threshold for Lambda
-	num_sentence_to_train = 10  # Training sentences
+	num_sentence_to_train = 1000  # Training sentences
 else:
 	epsilon = float(sys.argv[1])
 	num_sentence_to_train = int(sys.argv[2])
@@ -16,7 +16,7 @@ print(num_sentence_to_train)
 numpy.set_printoptions(threshold=sys.maxint)
 
 
-sentences = readSentences("../data/pos/brown", num_sentence_to_train)
+sentences = readSentences("../data/pos/wsj", num_sentence_to_train)
 
 symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
 map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)
@@ -61,8 +61,8 @@ while True:
 		print " ".join(["iter_count:", str(iter_count)])
 		break;
 
-numpy.save("TPM_{0}_{1}".format(epsilon, num_sentence_to_train), TPM)
-numpy.save("Lambda_{0}_{1}".format(epsilon, num_sentence_to_train), Lambda)
+numpy.save("TPM_wsj_{0}_{1}".format(epsilon, num_sentence_to_train), TPM)
+numpy.save("Lambda_wsj_{0}_{1}".format(epsilon, num_sentence_to_train), Lambda)
 
 print("training done")
 # End training

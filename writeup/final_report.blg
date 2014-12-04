@@ -3,9 +3,10 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: final_report.aux
 The style file: abbrv.bst
 Database file #1: references.bib
+Warning--I didn't find a database entry for "memmAhmmResults"
 You've used 9 entries,
             2118 wiz_defined-function locations,
-            568 strings with 5495 characters,
+            570 strings with 5503 characters,
 and the built_in function-call counts, 3305 in all, are:
 = -- 326
 > -- 145
@@ -44,3 +45,4 @@ warning$ -- 0
 while$ -- 31
 width$ -- 10
 write$ -- 102
+(There was 1 warning)

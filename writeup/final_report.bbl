@@ -11,10 +11,6 @@ W.~Ching, E.~Fung, and M.~Ng.
   Engineering and Automated Learning}, volume 2690 of {\em Lecture Notes in
   Computer Science}, pages 535--539. Springer Berlin Heidelberg, 2003.
 
-\bibitem{hmmCode}
-A.~W. for Computational~Linguistics.
-\newblock Software, 2011.
-
 \bibitem{brownCorpus}
 W.~N. Francis and H.~Kucera.
 \newblock Brown corpus manual.
@@ -26,6 +22,10 @@ D.~Freitag and A.~McCallum.
 \newblock Information extraction with hmms and shrinkage.
 \newblock In {\em Proceedings of the AAAI-99 workshop on machine learning for
   information extraction}, pages 31--36. Orlando, Florida, 1999.
+
+\bibitem{hmmCode}
+M.~Hamilton.
+\newblock Software, 2011.
 
 \bibitem{nlpEx}
 F.~Hasan, N.~UzZaman, and M.~Khan.

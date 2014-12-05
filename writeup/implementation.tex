@@ -1,5 +1,5 @@
 \section{Implementation}
-The project puts emphasis on implementation of both HMM and MEMM. We leverage on the Viterbi algorithm provided by Hamilton\cite{hmmCode} for HMM. We implemented MEMM from scratch. The MEMM implementation is largely based on McCallum et al.'s algorithm for information extraction\cite{memmPaper}.
+The project puts emphasis on implementation of both HMM and MEMM. We leverage on the Viterbi algorithm provided by Hamilton\cite{hmmCode} for HMM. We implemented MEMM entirely from scratch. The MEMM implementation is largely based on McCallum et al.'s algorithm for information extraction\cite{memmPaper}. Both HMM and MEMM are implemented in Python.
 
 \subsection{Learning}
 In POS tagging, training a HMM model in a supervised fashion reduces to a simple counting procedure~\cite{nlpBook}. In order to estimate $P( S_i | S_{i-1} )$ and $P( O_i | S_i )$, we can assume that our annotated corpus is a representative sample of the distribution we want to model, we can then define the distributions as follows:
@@ -34,13 +34,12 @@ The training data is divided into $N$ buckets. Each $O_i$ is placed the bucket c
 where the left hand side is the average occurance of the feature and the right hand side the expected value of the feature. The procedure could be found in more detail in \cite{memmPaper}. When the above condition is met, \Lambda and TPM should converge.
 
 \subsection{Experiment}
-All our code is implemented in Python. Also, we enhance an general HMM python module with additive smoothing~\cite{hmmCode}. Moreover, we implement MEMM in its entirety including the learning and decoding process.
-
 XXXXXXXX MEMM BROKEN TODO XXXXXXXXXXX
 
-The following tables show the results for both models when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). In addition to evaluating performance on the testing data we also evaluate the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
+The following tables show the results for both models when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). In addition to evaluating performance on the testing data we also evaluated the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
 
 \begin{figure}[ht]
+  \caption{Table Title}
   \begin{tabular}{ l || c | c | c | c | c }
     \bfseries & \bfseries & \bfseries \overline{Sentence} & \bfseries \sigma Sentence & \bfseries \overline{Tag} & \bfseries \sigma Tag
 

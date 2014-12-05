@@ -1,7 +1,1 @@
-Corpus,Model,Accuracy,Authors
-Brown,HMM,89.83,
-Brown,MEMM,20.67,
-WSJ,HMM,89.55,
-WSJ,MEMM,16.72,
-WSJ,HMM,96.46,Brants
-WSJ,MEMM,96.96,Denis and Sagot
+Corpus,Model,Accuracy,AuthorsBrown,HMM,89.83,Opropeza and XieBrown,MEMM,20.67,Opropeza and XieWSJ,HMM,89.55,Opropeza and XieWSJ,MEMM,16.72,Opropeza and XieWSJ,HMM,96.46,BrantsWSJ,MEMM,96.96,Denis and Sagot

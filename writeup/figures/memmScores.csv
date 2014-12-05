@@ -1,1 +1,1 @@
-Corpus,Train/Test,AVG Correct Sentences,STDDEV Correct Sentences,AVG Correct Tags,STDDEV CorrectTagsBrown,Test,0,0,3.47,0.02Brown,Train,0,0,19.29,0.02WSJ,Test,,,,WSJ,Train,,,,
+Corpus,Train/Test,AVG Correct Sentences,STDDEV Correct Sentences,AVG Correct Tags,STDDEV CorrectTagsBrown,Test,0,0,3.47,0.02Brown,Train,0,0,19.29,0.02WSJ,Test,0,0,2.43,1.88WSJ,Train,0,0,17.69,0.74

@@ -21,7 +21,7 @@ num_sentence_correct = 0
 num_tags_correct = 0
 num_tags = 0 
 
-sentences_total = readSentences("../data/pos/brown", num_sentence_to_learn)
+sentences_total = readSentences("../data/pos/wsj", num_sentence_to_learn)
 
 numberCrosses = 20
 crossSize = len(sentences_total)/ numberCrosses
@@ -35,9 +35,9 @@ for slice_index in range(numberCrosses):
 	train2 = sentences_total[(slice_index+1)*crossSize:]
 
 	# Training
-	sentences = train1 + train2
+	# sentences = train1 + train2
 	# Testing
-	# sentences = sentences_total[slice_index*crossSize: (slice_index+1)*crossSize]
+	sentences = sentences_total[slice_index*crossSize: (slice_index+1)*crossSize]
 
 	# MEMM model to use
 	TPM = numpy.load("TPM_wsj_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))
@@ -74,7 +74,8 @@ for slice_index in range(numberCrosses):
 		viterbi_tuple = MEMMViterbi(TPM, Pi_state_index, word_sequence, map_symbol_index, map_POS_index)
 		viterbi_sequence = [map_index_POS[x] for x in viterbi_tuple[0]]
 
-		print("sentence {0}".format(num_sentence))
+		# print("sentence {0}".format(num_sentence))
+		
 		# print(word_sequence)
 		# print("*"*80)
 		# print(viterbi_sequence)

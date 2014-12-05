@@ -1,4 +1,5 @@
 \section{Implementation}
+
 The project puts emphasis on implementation of both HMM and MEMM. We leverage on the Viterbi algorithm provided by Hamilton\cite{hmmCode} for HMM. We implemented MEMM entirely from scratch. The MEMM implementation is largely based on McCallum et al.'s algorithm for information extraction\cite{memmPaper}. Both HMM and MEMM are implemented in Python.
 
 \subsection{Learning}
@@ -13,16 +14,16 @@ $P( O_i | S_i ) \approx \hat{P}( O_i | S_i ) = C( O_i, S_i )/C( S_i )$
 \end{equation}
 where $\hat{P}$ is the probability with respect to the corpus and $C( O_i, S_i ), C( S_i, S_{i-1} )$, and $C( S_i )$ are the appropriate occurrence and co-occurrence of the observations and states.
 
-However there is one additional issue that needs to be addressed before the model can be used for tagging: how should the model respond to words it did not encounter during training? If left unattended, then $P( O_i | S_i ) = 0$. Consequently, Viterbi's algorithm will make incorrect decision during the decoding process. The technique we employ to address this issue is Laplace smoothing (also known as additive smoothing)~\cite{laplaceSmooth}. The general idea of this approach is that every state will always have a small emission probability of producing an unseen word (denoted in our case by "<U>"). And every time the model encounters an unknown word it will use $P( <U> | S_i )$ as the emission probability. The small probability is created by setting $C( <U>, S ) = 1$ and incrementing $C( S )$ by 1 for each state $S$ after calculating the transition probabilities and before calculating the emission probabilities.
+However there is one additional issue that needs to be addressed before the model can be used for tagging: how should the model respond to words it did not encounter during training? If left unattended then $P( O_i | S_i ) = 0$ and consequently, Viterbi's algorithm will make incorrect decisions during the decoding process. The technique we employ to address this issue is Laplace smoothing (also known as additive smoothing)~\cite{laplaceSmooth}. The general idea of this approach is that every state will always have a small emission probability of producing an unseen word (denoted in our case by "<U>"). And every time the model encounters an unknown word it will use $P( <U> | S_i )$ as the emission probability. The small probability is created by setting $C( <U>, S ) = 1$ and incrementing $C( S )$ by 1 for each state $S$ after calculating the transition probabilities and before calculating the emission probabilities.
 
-Training the MEMM is different from the straight forward counting method used in HMM. Since state transition depends on both previous state and the current observation, one large transition probability matrix (TPM) is employed. The TPM encapsulates all combinations of previous states $S_i-1$ and current observation $O_i$ pair to the current state $S_i$. Let $N$ represents the number of unique states and $M$ the number of unique words, the TPM has the shape $N * M x N$. Each feature $f_a$ is an indicator function that takes $(O_i, S_i)$ as arguments with additional normalizing feature $f_x(O_i, S_i) = C - \sum\limits_{a} f_a(O_i, S_i)$ to ensure $(O, S)$ pairs not captured by specific features don't get penalized. The transitional probability takes the exponential family form:
+Training the MEMM is different from the straight forward counting method used in HMM. Since state transition depends on both previous state and the current observation, one large transition probability matrix (TPM) is employed. The TPM encapsulates all combinations of previous states $S_i-1$ and current observation $O_i$ pair to the current state $S_i$. Let $N$ represents the number of unique states and $M$ the number of unique words, the TPM has the shape $N * M x N$. Each feature $f_a$ is an indicator function that takes $(O_i, S_{i-1})$ as arguments with additional normalizing feature $f_x(O_i, S_i) = C - \sum\limits_{a} f_a(O_i, S_i)$ to ensure $(O, S)$ pairs not captured by specific features don't get penalized. The transitional probability takes the exponential family form:
 \vspace{-1em}
 \begin{equation}
-$P_{s_{i-1}}(S | O) = \frac{1}{Z(O_i, S_{i-1}} exp(\sum\limits_{a}\Lambda_a f_a(O_i, S_i))$
+$P_{s_{i-1}}(S | O_i) = \frac{1}{Z(O_i, S_{i-1})} exp(\sum\limits_{a}\Lambda_a f_a(O_i, S_i))$
 \end{equation}
-where Z is the normalizing factor that makes the TPM sum to 1 across each row and $\Lambda$ is the parameter to be learned.
+where Z is the normalizing factor that makes the TPM sum to 1 across each row and $\Lambda$ is the weight parameter to be learned.
 
-The training data is divided into $N$ buckets. Each $O_i$ is placed the bucket corresponding to $S_i-1$. Let $m_s_i-1$ represent the number of observations per bucket. We then used generalized iterative scaling (GIS) to optimize $\Lambda_a$ so that it satisifies the following property for each $S_i$:
+The training data is divided into $N$ buckets. For each sentence and for each $(tag, word)$ in them, the $(S_i, O_i)$ is placed the bucket corresponding to $S_{i-1}$ tag. Let $m_s_{i-1}$ represent the number of observations per bucket. We then used generalized iterative scaling (GIS) to optimize each $\Lambda_a$ so that it satisfies the following property for each tag:
 
 \vspace{-1em}
 \begin{equation}
@@ -31,7 +32,7 @@ The training data is divided into $N$ buckets. Each $O_i$ is placed the bucket c
 %\end{multline}
 \end{equation}
 
-where the left hand side is the average occurance of the feature and the right hand side the expected value of the feature. The procedure could be found in more detail in \cite{memmPaper}. When the above condition is met, \Lambda and TPM should converge.
+where the left hand side is the average occurrence of the feature and the right hand side the expected value of the feature. The procedure is described in more detail in \cite{memmPaper}. When the above condition is met, \Lambda_ and TPM should converge.
 
 \subsection{Experiment}
 XXXXXXXX MEMM BROKEN TODO XXXXXXXXXXX

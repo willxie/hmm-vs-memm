@@ -1,0 +1,12 @@
+\section{HMM vs. MEMM}
+The HMM is generative model for the joint distribution of states (POS tags) and observations (words). The state transition follows the Markov assumption. In other words, the transitions between states is restricted to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM extends the maximum entropy classifier. It is a discriminative model that captures the conditional probability of the current state given the observation and the previous state. Figure \ref{hmmVmemm} shows pictorially the difference between both models.
+
+The MEMM, like the maximum entropy model it is based on, are multinomial logistic regressions to do classification but they focus on making the fewest number of assumptions. While the HMM only uses two aspects of the problem: the transition probabilities for states $P( S_i | S_{i-1} )$ and emission probabilities for current state and observation $P( O_i | S_i )$, MEMM integrates feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. For example, capitalization is closely associated with proper nouns and specific suffixes, such as "-ed" and "-ing", tend to be associated with verbs. These rules are useful features that can help improve the accuracy of the POS tagger not captured in the HMM model. Moreover, this model can be augmented to include features involving additional past states and past or future observations~\cite{nlpBook}. Finally, the typical algorithms used to find the most probable state sequence for HMM can be modified for MEMM without additional overhead~\cite{memmPaper}.
+
+However, MEMM is susceptible to the "label bias problem". This issue generally arises in two forms. First, if a state, $S_i$, has a high probability of transitioning to $S_j$ with $i \neq j$ (low entropy with the extreme case of probability from $S_i$ to $S_j$ is 1), the observation would be less influential during the decoding process. This occurs when a sequence of observations and the corresponding tags appears abnormally frequently in the training set. The other source of bias is during labelling phase. When an observation occurs infrequently in the training set leads to an inaccurate tag, the tags for subsequent observations are affected by the error as well. \cite{labelBiasProblem}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=80mm]{figures/memm.png}
+\caption{Hidden Markov Model(top) and Maximum Entropy Markov Model(bottom)~\cite{nlpBook}. \label{hmmVmemm}}
+\end{figure}

@@ -3,18 +3,18 @@ from memm import *
 numpy.set_printoptions(threshold=sys.maxint)
 
 if len(sys.argv) == 1:
-	num_sentence_to_learn = 10  # Training sentences
+	num_sentence_to_learn = 100  # Training sentences
 else:
 	num_sentence_to_learn = int(sys.argv[1])
 
 print("num_sentence_to_learn = "),
 print(num_sentence_to_learn)
 
-sentences = readSentences("../data/pos/brown", num_sentence_to_learn)
+sentences = readSentences("../data/pos/wsj", num_sentence_to_learn)
 
 # MEMM model to use
-TPM = numpy.load("TPM_current.npy")
-Lambda = numpy.load("Lambda_current.npy")
+TPM = numpy.load("TPM_wsj_0.1_100.npy")
+Lambda = numpy.load("Lambda_wsj_0.1_100.npy")
 
 symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
 map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)
@@ -29,6 +29,7 @@ num_tags_correct = 0
 num_tags = 0 
 
 for sentence in sentences:
+
 	word_sequence = []
 	pos_sequence = []
 

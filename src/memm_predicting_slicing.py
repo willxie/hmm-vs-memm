@@ -27,7 +27,17 @@ numberCrosses = 20
 crossSize = len(sentences_total)/ numberCrosses
 
 for slice_index in range(numberCrosses):
-	sentences = sentences_total[slice_index*crossSize: (slice_index+1)*crossSize]
+	print("slice_index = {0}".format(slice_index))
+	if slice_index != 0:
+		train1 = sentences_total[:slice_index*crossSize]
+	else:
+		train1 = []
+	train2 = sentences_total[(slice_index+1)*crossSize:]
+
+	# Training
+	sentences = train1 + train2
+	# Testing
+	# sentences = sentences_total[slice_index*crossSize: (slice_index+1)*crossSize]
 
 	# MEMM model to use
 	TPM = numpy.load("TPM_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))

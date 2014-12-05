@@ -3,7 +3,7 @@ from memm import *
 
 if len(sys.argv) == 1:
 	epsilon = 0.1 				# This is convergence threshold for Lambda
-	num_sentence_to_train = 1000  # Training sentences
+	num_sentence_to_train = 100  # Training sentences
 else:
 	epsilon = float(sys.argv[1])
 	num_sentence_to_train = int(sys.argv[2])
@@ -14,7 +14,6 @@ print(num_sentence_to_train)
 
 # Begin training
 numpy.set_printoptions(threshold=sys.maxint)
-
 
 sentences = readSentences("../data/pos/wsj", num_sentence_to_train)
 

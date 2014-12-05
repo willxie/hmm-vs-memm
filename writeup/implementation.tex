@@ -1,46 +1,29 @@
-\section{Implementation}
+\section{Implementation and Experiments}
+\label{sec:implementation}
+We have implemented both HMM and MEMM in Python with NumPy. We leverage on the Viterbi algorithm provided by Hamilton\cite{hmmCode} for HMM. We implemented MEMM entirely from scratch. The MEMM implementation is largely based on McCallum et al.'s algorithm for information extraction\cite{memmPaper}.
 
-The project puts emphasis on implementation of both HMM and MEMM. We leverage on the Viterbi algorithm provided by Hamilton\cite{hmmCode} for HMM. We implemented MEMM entirely from scratch. The MEMM implementation is largely based on McCallum et al.'s algorithm for information extraction\cite{memmPaper}. Both HMM and MEMM are implemented in Python.
+MEMM was implemented based on the learning algorithm discribed in section ~\ref{sec:comparison}. The decoding algorithm we used is modified viterbi algorithm. Unknow words are handled using uniform distribution similar to that of HMM. The condition for convergence is when $\lambda_a$ is within 0.1 of the previous value. The precision could be further improved at at the costly expense of computation time. Training with 1000 sentences from WSJ and Brown, the sentence and tag accuracies are (0, 16.72) and (0, 20.67) percents respectively. The following table shows the results when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). We used total of 200 sentences, each portion 10 sentences long. In addition to evaluating performance on the testing data we also evaluated the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
 
-\subsection{Learning}
-In POS tagging, training a HMM model in a supervised fashion reduces to a simple counting procedure~\cite{nlpBook}. In order to estimate $P( S_i | S_{i-1} )$ and $P( O_i | S_i )$, we can assume that our annotated corpus is a representative sample of the distribution we want to model, we can then define the distributions as follows:
-\vspace{-1em}
-\begin{equation}
-$P( S_i | S_{i-1} ) \approx \hat{P}( S_i | S_{i-1} ) = C( S_i, S_{i-1} )/C( S_{i-1} )$
-\end{equation}
-\vspace{-1em}
-\begin{equation}
-$P( O_i | S_i ) \approx \hat{P}( O_i | S_i ) = C( O_i, S_i )/C( S_i )$
-\end{equation}
-where $\hat{P}$ is the probability with respect to the corpus and $C( O_i, S_i ), C( S_i, S_{i-1} )$, and $C( S_i )$ are the appropriate occurrence and co-occurrence of the observations and states.
+%The following tables show the results for both models when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). In addition to evaluating performance on the testing data we also evaluated the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
 
-However there is one additional issue that needs to be addressed before the model can be used for tagging: how should the model respond to words it did not encounter during training? If left unattended then $P( O_i | S_i ) = 0$ and consequently, Viterbi's algorithm will make incorrect decisions during the decoding process. The technique we employ to address this issue is Laplace smoothing (also known as additive smoothing)~\cite{laplaceSmooth}. The general idea of this approach is that every state will always have a small emission probability of producing an unseen word (denoted in our case by "<U>"). And every time the model encounters an unknown word it will use $P( <U> | S_i )$ as the emission probability. The small probability is created by setting $C( <U>, S ) = 1$ and incrementing $C( S )$ by 1 for each state $S$ after calculating the transition probabilities and before calculating the emission probabilities.
-
-Training the MEMM is different from the straight forward counting method used in HMM. Since state transition depends on both previous state and the current observation, one large transition probability matrix (TPM) is employed. The TPM encapsulates all combinations of previous states $S_i-1$ and current observation $O_i$ pair to the current state $S_i$. Let $N$ represents the number of unique states and $M$ the number of unique words, the TPM has the shape $N * M x N$. Each feature $f_a$ is an indicator function that takes $(O_i, S_{i-1})$ as arguments with additional normalizing feature $f_x(O_i, S_i) = C - \sum\limits_{a} f_a(O_i, S_i)$ to ensure $(O, S)$ pairs not captured by specific features don't get penalized. The transitional probability takes the exponential family form:
-\vspace{-1em}
-\begin{equation}
-$P_{s_{i-1}}(S | O_i) = \frac{1}{Z(O_i, S_{i-1})} exp(\sum\limits_{a}\Lambda_a f_a(O_i, S_i))$
-\end{equation}
-where Z is the normalizing factor that makes the TPM sum to 1 across each row and $\Lambda$ is the weight parameter to be learned.
-
-The training data is divided into $N$ buckets. For each sentence and for each $(tag, word)$ in them, the $(S_i, O_i)$ is placed the bucket corresponding to $S_{i-1}$ tag. Let $m_s_{i-1}$ represent the number of observations per bucket. We then used generalized iterative scaling (GIS) to optimize each $\Lambda_a$ so that it satisfies the following property for each tag:
-
-\vspace{-1em}
-\begin{equation}
-%\begin{multline}
-\frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} f_a(O_k, S_k) = \\ \frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} \sum\limits_{S}P_{s_{i-1}}(S|O_k)f_a(O_k, S)
-%\end{multline}
-\end{equation}
-
-where the left hand side is the average occurrence of the feature and the right hand side the expected value of the feature. The procedure is described in more detail in \cite{memmPaper}. When the above condition is met, \Lambda_ and TPM should converge.
-
-\subsection{Experiment}
-XXXXXXXX MEMM BROKEN TODO XXXXXXXXXXX
-
-The following tables show the results for both models when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). In addition to evaluating performance on the testing data we also evaluated the model's performance on the training data. Testing the model with training data will give us an idea of over fitting (how much generalizable is the model for this task) and testing with testing data will give us an idea of effectiveness of the system.
-
+% MEMM
 \begin{figure}[ht]
-  \caption{Table Title}
+  \begin{tabular}{ l || c | c | c | c | c }
+    \bfseries & \bfseries & \bfseries \overline{Sentence} & \bfseries \sigma Sentence & \bfseries \overline{Tag} & \bfseries \sigma Tag
+
+    \csvreader[head to column names]{figures/memmScores.csv}{}% use head of csv as column names
+    {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
+    \end{tabular}
+    \caption{}
+\end{figure}
+
+The results we obtained from MEMM is significnatly lower than expected. With the low tag accuracy, 0 sentence accuracy is a reasonable result. We believe this is the result of insufficent training data. The largest training set we were able to run was 1000 sentences. For WSJ and Brown, it generated TPM with sizes 389501 and 49 and 230112 by 48 respectively, comparing to 59670 by 39 and 38136 by 42 for 100 sentences. The computation time increases with the size of TPM making learning from large training data infeasible for the scope of this project. Because MEMM requires dividing observations into buckets, the problem amplifies. For example, if observation ``The'' with tag ``DT'' appears in the data $c$ times, these occurances would be divided among the previous state buckets for ``NN'', ``VB'', ``DT'', etc. Each bucket would have far fewer than the total $c$ occurances, drawing inconclusive probabilities. In addition, with non-trivial chance of error due to small training set, the modifield Viterbi algorithm magnifies the problem by propogating the error through the sentence.
+
+Another reason for the cause of the low accuracy is the possibility of GIS converging to local minima.
+
+HMM, due to simpler model and fasater training in comparison, was able to train using the entire data set. The below is the same 20-fold cross-validation method described above for WSJ and Brown corpora:
+% HMM
+\begin{figure}[ht]
   \begin{tabular}{ l || c | c | c | c | c }
     \bfseries & \bfseries & \bfseries \overline{Sentence} & \bfseries \sigma Sentence & \bfseries \overline{Tag} & \bfseries \sigma Tag
 
@@ -50,7 +33,9 @@ The following tables show the results for both models when we execute our experi
     \caption{HMM percent scores (\%) for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and stdev for the number of tags correctly labelled. The experiments \label{hmmScores}}
 \end{figure}
 
-Given that our implementation of MEMM performs considerably worse than expected (possibly caused by a bug or GIS is converging at a local maxima), we can not directly compare the performance of both models for POS tagging as we would have liked. Ideally, we would compare not only the overall performance of the models but also determine which POS tags had a boost in accuracy and also which ones decreased. From our intuition by adding features that help Noun or Verb tagging we should see an increase in performance for Noun and Verbs in MEMMs.
+The results shows HMM performs significantly better at Brown in sentence accuracy and than WSJ and marginally better in tag accuracy. [reasons: longer sentences, number of unknown words, or just 'luck' for tags due to randomness]
+
+Given that our implementation of MEMM performs considerably worse than expected, we can not directly compare the performance of both models for POS tagging as we intended. Ideally, we would compare not only the overall performance of the models but also determine which POS tags had a boost in accuracy and also which ones decreased. From our intuition by adding features that help Noun or Verb tagging we should see an increase in performance for Noun and Verbs in MEMMs.
 
 Never the less, the literature shows that MEMM tend to outperform HMM in POS tagging. Brants reports that their HMM POS tagger reaches 96.46\% accuracy in the WSJ corpus while Denis and Sagot's MEMM tagger correctly tags sentences in WSJ 96.96\% of the time~\cite{memmAhmmResultsACL}. Figure ~\ref{allScores} shows the results for various experiments in POS tagging.
 

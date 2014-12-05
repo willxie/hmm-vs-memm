@@ -15,7 +15,7 @@ print(num_sentence_to_train)
 # Begin training
 numpy.set_printoptions(threshold=sys.maxint)
 
-sentences_total = readSentences("../data/pos/brown", num_sentence_to_train)
+sentences_total = readSentences("../data/pos/wsj", num_sentence_to_train)
 
 numberCrosses = 20
 crossSize = len(sentences_total)/ numberCrosses
@@ -73,8 +73,8 @@ for slice_index in range(numberCrosses):
 			print " ".join(["iter_count:", str(iter_count)])
 			break;
 
-	numpy.save("TPM_{0}_{1}_{2}".format(epsilon, num_sentence_to_train, slice_index), TPM)
-	numpy.save("Lambda_{0}_{1}_{2}".format(epsilon, num_sentence_to_train, slice_index), Lambda)
+	numpy.save("TPM_wsj_{0}_{1}_{2}".format(epsilon, num_sentence_to_train, slice_index), TPM)
+	numpy.save("Lambda_wsj_{0}_{1}_{2}".format(epsilon, num_sentence_to_train, slice_index), Lambda)
 
 	print("training done")
 # End training

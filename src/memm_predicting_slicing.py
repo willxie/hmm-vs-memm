@@ -40,8 +40,8 @@ for slice_index in range(numberCrosses):
 	# sentences = sentences_total[slice_index*crossSize: (slice_index+1)*crossSize]
 
 	# MEMM model to use
-	TPM = numpy.load("TPM_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))
-	Lambda = numpy.load("Lambda_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))
+	TPM = numpy.load("TPM_wsj_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))
+	Lambda = numpy.load("Lambda_wsj_{0}_{1}_{2}.npy".format(epsilon, num_sentence_to_learn, slice_index))
 
 	symbolsSeen, POS_tagsSeen, map_wordPOS_count, map_POSPOS_count, map_POS_count, map_word_count = getCountsFromSentences(sentences)
 	map_symbol_index, map_POS_index, transition_probabilities, emission_probabilities = createConditionalProbabilitiesTables(sentences, False)

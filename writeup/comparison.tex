@@ -1,7 +1,7 @@
 \section{HMM vs. MEMM}
 \label{sec:comparison}
 
-The HMM is generative model for the joint distribution of states (POS tags) and observations (words). The model is captured by two matrices, transitional probability matrix for state to state and emission probability matrix for state to observation. The state transition follows the Markov assumption. In other words, the transitions between states is restricted to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM extends the maximum entropy classifier. It is a discriminative model that captures the conditional probability of the current state given the observation and the previous state. Figure \ref{hmmVmemm} shows pictorially the difference between the models.
+An HMM is generative model for the joint distribution of states (POS tags) and observations (words). The model is captured by two matrices, transitional probability matrix for state to state and emission probability matrix for state to observation. The state transition follows the Markov assumption. In other words, a the transitions between states is restricted to be dependent only on the immediate past~\cite{nlpBook}. On the other hand, MEMM extends a maximum entropy classifier. It is a discriminative model that captures the conditional probability of the current state given the observation and the previous state. Figure \ref{hmmVmemm} shows pictorially the difference between the models.
 
 The MEMM, like the maximum entropy model it is based on, is a multinomial logistic regression for classification but it focuses on making the fewest number of assumptions about the training data. Furthermore, the HMM only uses two aspects of the problem: the transition probabilities for states $P( S_i | S_{i-1} )$ and emission probabilities for the current state and observation $P( O_i | S_i )$. MEMM, in contrast, integrates feature information from the observations in addition to the previous state knowledge in order to derive a more accurate prediction model. This is captured in a single transitional probability matrix. For example, capitalization is closely associated with proper nouns and specific suffixes, such as "-ed" and "-ing", tend to be associated with verbs. These rules are useful features that can help improve the accuracy of the POS tagger which are not captured in the HMM model. Moreover, this model can be augmented further to include features involving additional past states and past or future observations~\cite{nlpBook}. Finally, the typical algorithms used to find the most probable state sequence for HMM can be modified for MEMM without additional overhead~\cite{memmPaper}.
 
@@ -10,5 +10,5 @@ However, MEMM is susceptible to the "label bias problem". This issue generally a
 \begin{figure}[ht]
 \centering
 \includegraphics[width=80mm]{figures/memm.png}
-\caption{Hidden Markov Model(top) and Maximum Entropy Markov Model(bottom)~\cite{nlpBook}. \label{hmmVmemm}}
+\caption{(top) Hidden Markov Model and (bottom) Maximum Entropy Markov Model~\cite{nlpBook}. \label{hmmVmemm}}
 \end{figure}

@@ -48,7 +48,7 @@ The results we obtained for MEMM are significantly lower than expected. With suc
 
 Given the poor results from our implementation of MEMM, we have tested each part of the program individually and intensively by manually creating ideal data, transitional probabilities, and other features of the model. Through inspection, each part seems to be behave as expected and no bugs was found. Even though the accuracy of the experiments is low, it is still in line with the performance of HMM with Brown having higher tag accuracy than WSJ. This leads us to believe the main culprit remains to be the small training set.
 
-Given that our implementation of MEMM performs considerably worse than expected due to the insufficent training data, we cannot draw meaningful conclusions based on the results. Ideally, we would compare not only the overall performance of the models but also determine which POS tags experience an increase in accuracy.
+Given that our implementation of MEMM performs considerably worse than expected due to the insufficient training data, we cannot draw meaningful conclusions based on the results. Ideally, we would compare not only the overall performance of the models but also determine which POS tags experience an increase in accuracy.
 
 Nevertheless, the literature shows that MEMM tends to outperform HMM in POS tagging. Brants reports that their HMM POS tagger reaches 96.46\% accuracy in the WSJ corpus while Denis and Sagot's MEMM tagger correctly tags 96.96\% for the same corpus. ~\cite{memmAhmmResultsACL}. Figure~\ref{allScores} shows the results for various experiments in POS tagging.
 

@@ -1,4 +1,4 @@
-\section{Implementation and Experiments}
+\section{Implementation and Results}
 \label{sec:implementation}
 We implemented both HMM and MEMM in Python using NumPy. For the HMM model, we leverage on the Viterbi algorithm provided by Hamilton~\cite{hmmCode} and the training was done as per section~\ref{sec:learning}. The following table shows the results for HMM when we execute our experiments using 20-fold cross-validation (train with 19 portions and test on 1). The HMM, due to its fast training, was trained using the entire corpus. In addition to evaluating performance on the testing data we also evaluated the model's performance on the training data. Testing the model with train data will give us an idea of over fitting (how much generalization is the model doing for this task) and testing with test data will give us an idea of the effectiveness of this model.
 % HMM
@@ -12,11 +12,12 @@ We implemented both HMM and MEMM in Python using NumPy. For the HMM model, we le
     \caption{HMM percent scores (\%) for the Brown and WSJ corpora. The first column is the corpus used. The second column is the data used for evaluating the system. Four scores are reported: the average and stdev for the number of sentences correctly tagged and the average and standard deviation for the number of tags correctly labled. \label{hmmScores}}
 \end{figure}
 
-The results show that the HMM parser performs significantly better with Brown in sentence accuracy than WSJ. Additionally, it also performs marginally better in tag accuracy. This contradicts our original hypothesis. For the sentence accuracy, this may be due to the length of the sentences. On average the Brown corpus has 16 observations per sentence. Meanwhile, WSJ has sentences averaging 53 observations. Another factor that may influence this score and the tag accuracy is the presence of unknown words. However, after further investigation, this hypothesis proved to be incorrect. On average Brown and WSJ encounter unknown words 12.1\% and 11.8\%. The data contradicts our hypothesis but the difference is marginal making the effect is inconclusive. Figure \ref{hmmScores1000} shows the results for the same experiment but limiting the number of sentences to 1000. Once again we see that Brown gives better performance.
+The results show that the HMM parser performs significantly better with Brown in sentence accuracy than WSJ. Additionally, it also performs marginally better in tag accuracy. This contradicts our original hypothesis. For the sentence accuracy, this may be due to the length of the sentences. On average the Brown corpus has 16 observations per sentence. Meanwhile, WSJ has sentences averaging 53 observations. Another factor that may influence this score and the tag accuracy is the presence of unknown words. However, after further investigation, this hypothesis proved to be incorrect. On average Brown and WSJ encounter unknown words 12.1\% and 11.8\%. The data contradicts our hypothesis but the difference is marginal making the effect is inconclusive. Figure \ref{hmmScores1000} shows the results for the same experiment but limiting the number of sentences to 1000. Once again we see that Brown gives better performance (Figure ~\ref{fig:hmm1000}). We also attempted to shuffle the sentences before running the experiment in order mitigate problems related to domain adaptation, giving a more general result. As expected, the Brown corpus yields 93.7\% and 95.8\% for test and train data respectively and WSJ 91.5\% and 93.5\%.
 
 %Another hypothesis that could explain these results is that because WSJ is targeted toward a demographic with high education background, its vocabulary might be broader. This makes the prediction more error prone when compared to a smaller vocabulary with higher concentration of common words.
 
 \begin{figure}[ht]
+
   \begin{tabular}{ l || c | c | c | c | c }
     \bfseries & \bfseries & \bfseries \overline{Sentence} & \bfseries \sigma Sentence & \bfseries \overline{Tag} & \bfseries \sigma Tag
 
@@ -24,6 +25,7 @@ The results show that the HMM parser performs significantly better with Brown in
     {\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv&\csvcolvi}% specify your coloumns here
     \end{tabular}
     \caption{HMM percent scores (\%) for the Brown and WSJ corpora using only 1000 sentences.}
+  \label{fig:hmm1000}
 \end{figure}
 
 

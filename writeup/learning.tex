@@ -10,11 +10,13 @@ P( S_i | S_{i-1} ) \approx \hat{P}( S_i | S_{i-1} ) = C( S_i, S_{i-1} )/C( S_{i-
 \begin{equation}
 P( O_i | S_i ) \approx \hat{P}( O_i | S_i ) = C( O_i, S_i )/C( S_i )
 \end{equation}
+
 where $\hat{P}$ is the probability with respect to the corpus and $C( O_i, S_i ), C( S_i, S_{i-1} )$, and $C( S_i )$ are the appropriate occurrences and co-occurrences of the observations and states.
 
 However, there is one additional issue that needs to be addressed before the model can be used for tagging: how should the model respond to words that model did not encounter during training? If left unattended then $P( O_i | S_i ) = 0$ and consequently, Viterbi's algorithm will make incorrect decisions during the predicting process. The technique we employ to address this issue is Laplace smoothing (also known as additive smoothing)~\cite{laplaceSmooth}. The general idea of this approach is that every state will always have a small emission probability of producing an unseen word (denoted in our case by ``$\langle U \rangle $''). And every time the model encounters an unknown word it will use $P(\langle U \rangle| S )$ as the emission probability. The small probability is created by setting $C(\langle U \rangle, S ) = 1$ and incrementing $C( S )$ by 1 for each state $S$ after calculating the transition probabilities and before calculating the emission probabilities.
 
 Training the MEMM is different from the straight forward counting method used in HMM. Since state transition depends on both previous state and the current observation, one large transition probability matrix (TPM) is employed. The TPM encapsulates all combinations of previous states $S_{i-1}$ and current observation $O_i$ pair in the training data to the current state $S_i$. Let $N$ represents the number of unique states and $M$ the number of unique words, the TPM has the shape $(N * M) \times N$. Each feature $f_a$ that we defined is an indicator function that takes $(O_i, S_{i-1})$ as arguments. An additional normalizing feature $f_x(O_i, S_i) = C - \sum\limits_{a} f_a(O_i, S_i)$ is added to ensure $(O, S)$ pairs not captured by specific features don't get penalized. The transitional probability takes the exponential family form:
+
 \vspace{-1em}
 \begin{equation}
 P_{s_{i-1}}(S_i | O_i) = \frac{1}{Z(O_i, S_{i-1})} exp(\sum\limits_{a}\lambda_a f_a(O_i, S_i))
@@ -23,12 +25,15 @@ where Z is the normalizing factor that makes the TPM sum to 1 across each row an
 
 The training data is divided into $N$ buckets. For each sentence and for each $(word, tag)$ pair in it, the $(O_i, S_i)$ is placed the bucket corresponding to the $S_{i-1}$ tag. In other words, the training data is split into local training sets. This is different from HMM which treats the data globally. Let $m_{s_{i-1}}$ represent the number of observations per bucket. We then use generalized iterative scaling (GIS) algorithm to optimize each $\lambda_a$ to satisfy the following property for every tag $S_{i-1}$:
 
-\vspace{-3em}
 \begin{equation}
-\begin{dmath}
-\frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} f_a(O_k, S_k) = \\ \frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} \sum\limits_{S}P_{s_{i-1}}(S|O_k)f_a(O_k, S)
-\end{dmath}
+  % \begin{multline}
+  %   \begin{dmath}
+  \begin{split}
+    &\frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} f_a(O_k, S_k) = \\ &\frac{1}{m_{s_{i-1}}}\sum\limits_{k=1}^{m_{s_{i-1}}} \sum\limits_{S}P_{s_{i-1}}(S|O_k)f_a(O_k, S)
+  \end{split}
+  % \end{multline}
+  % \end{dmath}
 \end{equation}
-\vspace{-5em}
+
 
 where the left hand side is the average occurrence of the feature and the right hand side the expected value of the feature. We continuously update the $\lambda$'s and TPM until the expected value converges to the average. At this point, model is fully trained. The procedure is described in more detail in \cite{memmPaper}.
